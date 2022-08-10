@@ -1,0 +1,23 @@
+version: '3.2'
+
+services:
+  super-cuma2:
+    container_name: super-cuma2
+    build: .
+    depends_on:
+      - super-cuma2-db
+    ports:
+      - "80:80"
+    volumes:
+      - "./html:/var/www/html"
+
+  super-cuma2-db:
+    container_name: super-cuma2-db
+    image: mysql:8.0
+    volumes:
+      - "./initdb:/docker-entrypoint-initdb.d"
+    environment:
+      MYSQL_DATABASE: super-cuma2
+      MYSQL_USER: super-cuma2
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
