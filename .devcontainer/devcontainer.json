@@ -15,5 +15,15 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "uname -a",
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "root"
+	"remoteUser": "root",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"junstyle.php-cs-fixer",
+				"bmewburn.vscode-intelephense-client",
+				"mhutchie.git-graph",
+				"WakaTime.vscode-wakatime"
+			]
+		}
+	}
 }

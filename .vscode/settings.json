@@ -1,0 +1,17 @@
+{
+  "php.validate.executablePath": "/usr/bin/php8.1",
+  "php.suggest.basic": false,
+  "php.validate.enable": false,
+  "php-cs-fixer.formatHtml": true,
+  "php-cs-fixer.executablePath": "${workspaceFolder}/tools/php-cs-fixer/vendor/bin/php-cs-fixer",
+  "php-cs-fixer.rules": "@PSR2",
+  "php-cs-fixer.onsave": false,
+  "php-cs-fixer.documentFormattingProvider": true,
+  "[php]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "junstyle.php-cs-fixer",
+    "editor.formatOnSave": true
+  },
+  "php-cs-fixer.autoFixBySemicolon": true
+}
