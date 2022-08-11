@@ -1,6 +1,11 @@
 version: '3.2'
 
 services:
+  super-cuma2-dev:
+    container_name: super-cuma2-dev
+    build: .
+    depends_on:
+      - super-cuma2-db
   super-cuma2:
     container_name: super-cuma2
     build: .
@@ -15,7 +20,7 @@ services:
     container_name: super-cuma2-db
     image: mysql:8.0
     volumes:
-      - "./initdb:/docker-entrypoint-initdb.d"
+      - "./db:/etc/mysql/conf.d"
     environment:
       MYSQL_DATABASE: super-cuma2
       MYSQL_USER: super-cuma2

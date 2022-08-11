@@ -1,5 +1,4 @@
 {
-  "php.validate.executablePath": "/usr/bin/php8.1",
   "php.suggest.basic": false,
   "php.validate.enable": false,
   "php-cs-fixer.formatHtml": true,
