@@ -47,7 +47,7 @@
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse",
-        "build-css": "pscss --style=compressed < webroot/scss/custom.scss > webroot/css/style.css",
+        "build-css": "pscss --style=compressed < webroot/scss/custom-bootstrap.scss > webroot/css/bootstrap.css",
         "test": "phpunit --colors=always"
     },
     "prefer-stable": true,
