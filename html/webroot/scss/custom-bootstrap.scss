@@ -1,5 +1,0 @@
-// pscssを実行したときのカレントディレクトリ基準でパスが解決されるので、これだと動かない
-// html/で実行することにして、vendorから指定する
-// @import "../../vendor/twbs/bootstrap/scss/bootstrap.scss"
-@import "vendor/twbs/bootstrap/scss/bootstrap.scss"
-

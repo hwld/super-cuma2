@@ -31,8 +31,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
-    <?= $this->Html->css('bootstrap') ?>
-    <?= $this->Html->script('bootstrap') ?>
+    <?= $this->Html->css('/bootstrap/css/bootstrap') ?>
+    <?= $this->Html->script('/bootstrap/js/bootstrap') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
