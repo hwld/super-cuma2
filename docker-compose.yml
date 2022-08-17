@@ -15,6 +15,7 @@ services:
       - "80:80"
     volumes:
       - "./html:/var/www/html"
+      - "./php.ini:/usr/local/etc/php/php.ini"
 
   super-cuma2-db:
     container_name: super-cuma2-db
