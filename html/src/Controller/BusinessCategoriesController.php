@@ -18,7 +18,7 @@ class BusinessCategoriesController extends AppController
      */
     public function index()
     {
-        $businessCategories = $this->paginate($this->BusinessCategories);
+        $businessCategories = $this->paginate($this->BusinessCategories, ['limit' => 10]);
 
         $this->set(compact('businessCategories'));
     }

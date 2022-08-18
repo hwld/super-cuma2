@@ -83,7 +83,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </div>
     </nav>
     <main class="main">
-        <div class="container">
+        <div class="container pt-3">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
         </div>
