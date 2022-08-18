@@ -19,10 +19,18 @@ class CreateSales extends AbstractMigration
             'default' => null
         ])
         ->addColumn('customer_id', 'integer', [
+            'null' => true,
             'default' => null
         ])
+        ->addForeignKey('customer_id', 'customers', ['id'], [
+            'delete' => 'SET NULL'
+        ])
         ->addColumn('product_id', 'integer', [
+            'null' => true,
             'default' => null
+        ])
+        ->addForeignKey('product_id', 'products', ['id'], [
+            'delete' => 'SET NULL'
         ])
         ->addColumn('amount', 'integer', [
             'default' => null

@@ -50,7 +50,6 @@ class CompaniesTable extends Table
 
         $this->belongsTo('BusinessCategories', [
             'foreignKey' => 'business_category_id',
-            'joinType' => 'INNER',
         ]);
         $this->hasMany('Customers', [
             'foreignKey' => 'company_id',

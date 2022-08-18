@@ -16,9 +16,12 @@ class CreateCompanies extends AbstractMigration
     {
         $this
         ->table('companies')
-
         ->addColumn('business_category_id', 'integer', [
+            'null' => true,
             'default' => null
+        ])
+        ->addForeignKey('business_category_id', 'business_categories', ['id'], [
+            'delete' => 'SET NULL'
         ])
         ->addColumn('company_name', 'string', [
             'default' => null,

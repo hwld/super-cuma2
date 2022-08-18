@@ -53,6 +53,15 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         <a class="nav-link" href="/customers">顧客</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/businessCategories">業種</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/companies">会社</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">製品</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/sales">売上</a>
                     </li>
                     <li class="nav-item dropdown">

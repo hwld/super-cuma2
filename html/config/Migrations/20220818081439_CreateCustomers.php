@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class CreateCustomer extends AbstractMigration
+class CreateCustomers extends AbstractMigration
 {
     /**
      * Change Method.
@@ -33,14 +33,22 @@ class CreateCustomer extends AbstractMigration
             'limit' => 1,
         ])
         ->addColumn('company_id', 'integer', [
+            'null' => true,
             'default' => null,
+        ])
+        ->addForeignKey('company_id', 'companies', ['id'], [
+            'delete' => 'SET NULL'
         ])
         ->addColumn('zip', 'string', [
             'default' => null,
             'limit' => 10
         ])
         ->addColumn('prefecture_id', 'integer', [
+            'null' => true,
             'default' => null,
+        ])
+        ->addForeignKey('prefecture_id', 'prefectures', ['id'], [
+            'delete' => 'SET NULL'
         ])
         ->addColumn('address1', 'string', [
             'default' => null,
