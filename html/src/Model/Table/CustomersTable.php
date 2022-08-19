@@ -102,8 +102,8 @@ class CustomersTable extends Table
             ->scalar('zip')
             ->maxLength('zip', 10)
             ->requirePresence('zip', 'create')
-            ->notEmptyString('zip');
-
+            ->allowEmptyString('zip');
+            
         $validator
             ->integer('prefecture_id')
             ->requirePresence('prefecture_id', 'create')
@@ -113,35 +113,35 @@ class CustomersTable extends Table
             ->scalar('address1')
             ->maxLength('address1', 200)
             ->requirePresence('address1', 'create')
-            ->notEmptyString('address1');
-
+            ->allowEmptyString('address1');
+            
         $validator
             ->scalar('address2')
             ->maxLength('address2', 200)
             ->requirePresence('address2', 'create')
-            ->notEmptyString('address2');
+            ->allowEmptyString('address2');
 
         $validator
             ->scalar('phone')
             ->maxLength('phone', 20)
             ->requirePresence('phone', 'create')
-            ->notEmptyString('phone');
+            ->allowEmptyString('phone');
 
         $validator
             ->scalar('fax')
             ->maxLength('fax', 20)
             ->requirePresence('fax', 'create')
-            ->notEmptyString('fax');
+            ->allowEmptyString('fax');
 
         $validator
             ->email('email')
             ->requirePresence('email', 'create')
-            ->notEmptyString('email');
+            ->allowEmptyString('email');
 
         $validator
             ->date('lasttrade')
             ->requirePresence('lasttrade', 'create')
-            ->notEmptyDate('lasttrade');
+            ->allowEmptyDate('lasttrade');
 
         return $validator;
     }

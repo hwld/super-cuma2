@@ -17,19 +17,14 @@ class CreateCustomers extends AbstractMigration
         $this
         ->table('customers')
 
-        ->addColumn('customer_cd', 'string', [
-            'default' => null,
-        ])
+        ->addColumn('customer_cd', 'string')
         ->addColumn('name', 'string', [
-            'default' => null,
             'limit' => 50,
         ])
         ->addColumn('kana', 'string', [
-            'default' => null,
             'limit' => 50,
         ])
         ->addColumn('gender', 'integer', [
-            'default' => null,
             'limit' => 1,
         ])
         ->addColumn('company_id', 'integer', [
@@ -40,6 +35,7 @@ class CreateCustomers extends AbstractMigration
             'delete' => 'SET NULL'
         ])
         ->addColumn('zip', 'string', [
+            'null' => true,
             'default' => null,
             'limit' => 10
         ])
@@ -51,26 +47,32 @@ class CreateCustomers extends AbstractMigration
             'delete' => 'SET NULL'
         ])
         ->addColumn('address1', 'string', [
+            'null' => true,
             'default' => null,
             'limit' => 200
         ])
         ->addColumn('address2', 'string', [
+            'null' => true,
             'default' => null,
             'limit' => 200
         ])
         ->addColumn('phone', 'string', [
+            'null' => true,
             'default' => null,
             'limit' => 20
         ])
         ->addColumn('fax', 'string', [
+            'null' => true,
             'default' => null,
             'limit' => 20
         ])
         ->addColumn('email', 'string', [
+            'null' => true,
             'default' => null,
             'limit' => 100
         ])
         ->addColumn('lasttrade', 'date', [
+            'null' => true,
             'default' => null,
         ])
         ->addColumn('created', 'datetime')

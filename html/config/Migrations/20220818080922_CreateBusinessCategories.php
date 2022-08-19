@@ -16,7 +16,6 @@ class CreateBusinessCategories extends AbstractMigration
     {
         $this->table('business_categories')
         ->addColumn('business_category_name', 'string', [
-            'default' => null,
             'limit' => 200
         ])
         ->addColumn('created', 'datetime')

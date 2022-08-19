@@ -15,9 +15,7 @@ class CreateSales extends AbstractMigration
     public function change()
     {
         $this->table('sales')
-        ->addColumn('purchase_date', 'date', [
-            'default' => null
-        ])
+        ->addColumn('purchase_date', 'date')
         ->addColumn('customer_id', 'integer', [
             'null' => true,
             'default' => null

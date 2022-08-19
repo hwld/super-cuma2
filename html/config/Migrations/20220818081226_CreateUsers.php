@@ -16,12 +16,9 @@ class CreateUsers extends AbstractMigration
     {
         $this->table('users')
         ->addColumn('username', 'string', [
-            'default' => null,
             'limit' => 50
         ])
-        ->addColumn('password', 'string', [
-            'default' => null
-        ])
+        ->addColumn('password', 'string')
         ->addColumn('created', 'datetime')
         ->addColumn('modified', 'datetime')
         ->create();

@@ -16,12 +16,9 @@ class CreateProducts extends AbstractMigration
     {
         $this->table('products')
         ->addColumn('product_name', 'string', [
-            'default' => null,
             'limit' => 200
         ])
-        ->addColumn('unit_price', 'integer', [
-            'default' => null
-        ])
+        ->addColumn('unit_price', 'integer')
         ->addColumn('created', 'datetime')
         ->addColumn('modified', 'datetime')
         ->addIndex('product_name')

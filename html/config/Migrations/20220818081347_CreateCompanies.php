@@ -24,11 +24,9 @@ class CreateCompanies extends AbstractMigration
             'delete' => 'SET NULL'
         ])
         ->addColumn('company_name', 'string', [
-            'default' => null,
             'limit' => 200
         ])
         ->addColumn('company_kana', 'string', [
-            'default' => null,
             'limit' => 200
         ])
         ->addColumn('created', 'datetime')

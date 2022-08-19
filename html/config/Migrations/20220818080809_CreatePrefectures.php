@@ -16,7 +16,6 @@ class CreatePrefectures extends AbstractMigration
     {
         $table = $this->table('prefectures')
         ->addColumn('pref_name', 'string', [
-            'default' => null,
             'limit' => 20
         ])
         ->addColumn('created', 'datetime')
