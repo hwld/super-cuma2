@@ -5,13 +5,13 @@
  */
 ?>
 <div>
-    <h3><?= __('業種') ?>
+    <h3><?= __('業種一覧') ?>
     </h3>
     <div class="text-end">
-        <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary px-3']) ?>
+        <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary px-3 py-1']) ?>
     </div>
     <div class="table-responsive mt-2">
-        <table class="table">
+        <table class="table table-bordered">
             <thead class="table-light">
                 <tr>
                     <th><?= $this->Paginator->sort('business_category_name', '業種') ?>
@@ -26,10 +26,6 @@
                     <td><?= h($businessCategory->business_category_name) ?>
                     </td>
                     <td>
-                        <?= $this->Html->link(__('詳細'), 
-                            ['action' => 'view', $businessCategory->id],
-                            ['class' => 'btn btn-sm btn-secondary']
-                        ) ?>
                         <?= $this->Html->link(__('更新'),
                             ['action' => 'edit', $businessCategory->id],
                             ['class' => 'btn btn-sm btn-secondary']

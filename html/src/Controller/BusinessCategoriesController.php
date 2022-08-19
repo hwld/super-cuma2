@@ -24,22 +24,6 @@ class BusinessCategoriesController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Business Category id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $businessCategory = $this->BusinessCategories->get($id, [
-            'contain' => ['Companies'],
-        ]);
-
-        $this->set(compact('businessCategory'));
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
@@ -50,11 +34,11 @@ class BusinessCategoriesController extends AppController
         if ($this->request->is('post')) {
             $businessCategory = $this->BusinessCategories->patchEntity($businessCategory, $this->request->getData());
             if ($this->BusinessCategories->save($businessCategory)) {
-                $this->Flash->success(__('The business category has been saved.'));
+                $this->Flash->success(__('業種 "{0}" を登録しました。', $businessCategory->business_category_name));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The business category could not be saved. Please, try again.'));
+            $this->Flash->error(__('業種を登録できませんでした。'));
         }
         $this->set(compact('businessCategory'));
     }
@@ -74,11 +58,11 @@ class BusinessCategoriesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $businessCategory = $this->BusinessCategories->patchEntity($businessCategory, $this->request->getData());
             if ($this->BusinessCategories->save($businessCategory)) {
-                $this->Flash->success(__('The business category has been saved.'));
+                $this->Flash->success(__('業種を更新しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The business category could not be saved. Please, try again.'));
+            $this->Flash->error(__('業種を更新できませんでした。'));
         }
         $this->set(compact('businessCategory'));
     }
@@ -95,9 +79,9 @@ class BusinessCategoriesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $businessCategory = $this->BusinessCategories->get($id);
         if ($this->BusinessCategories->delete($businessCategory)) {
-            $this->Flash->success(__('The business category has been deleted.'));
+            $this->Flash->success(__('業種を削除しました。'));
         } else {
-            $this->Flash->error(__('The business category could not be deleted. Please, try again.'));
+            $this->Flash->error(__('業種の削除できませんでした。'));
         }
 
         return $this->redirect(['action' => 'index']);

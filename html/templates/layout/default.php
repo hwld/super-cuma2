@@ -37,6 +37,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+
+    <style>
+        .required label:after {
+            content: '*';
+            color: red;
+            font-size: 1.25rem;
+        }
+    </style>
 </head>
 
 <body>
