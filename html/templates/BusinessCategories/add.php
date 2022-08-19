@@ -7,6 +7,7 @@
 <div>
     <?= $this->element('businessCategories/form', [
         'title' => '業種登録',
-        'action_text' => '登録'
+        'action_text' => '登録',
+        'businessCategory' => $businessCategory
     ]) ?>
 </div>

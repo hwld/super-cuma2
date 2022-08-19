@@ -4,49 +4,50 @@
  * @var \App\Model\Entity\Company[]|\Cake\Collection\CollectionInterface $companies
  */
 ?>
-<div class="companies index content">
-    <?= $this->Html->link(__('New Company'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Companies') ?></h3>
-    <div class="table-responsive">
-        <table>
-            <thead>
+<div>
+    <h3><?= __('会社一覧') ?>
+    </h3>
+    <div class="text-end">
+        <?= $this->Html->link(__('追加'), ['action' => 'add'], [
+            'class' => 'btn btn-primary px-3 py-1'
+        ]) ?>
+    </div>
+    <div class="table-responsive mt-2">
+        <table class="table table-bordered">
+            <thead class="table-light">
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('business_category_id') ?></th>
-                    <th><?= $this->Paginator->sort('company_name') ?></th>
-                    <th><?= $this->Paginator->sort('company_kana') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <th><?= $this->Paginator->sort('BusinessCategories.business_category_name', '業種') ?>
+                    </th>
+                    <th><?= $this->Paginator->sort('company_name', '会社名') ?>
+                    </th>
+                    <th><?= $this->Paginator->sort('company_kana', '会社名(カナ)') ?>
+                    </th>
+                    <th class="actions"><?= __('操作') ?>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($companies as $company): ?>
                 <tr>
-                    <td><?= $this->Number->format($company->id) ?></td>
-                    <td><?= $company->has('business_category') ? $this->Html->link($company->business_category->id, ['controller' => 'BusinessCategories', 'action' => 'view', $company->business_category->id]) : '' ?></td>
-                    <td><?= h($company->company_name) ?></td>
-                    <td><?= h($company->company_kana) ?></td>
-                    <td><?= h($company->created) ?></td>
-                    <td><?= h($company->modified) ?></td>
+                    <td><?= $company->has('business_category') ? h($company->business_category->business_category_name) : '不明' ?>
+                    </td>
+                    <td><?= h($company->company_name) ?>
+                    </td>
+                    <td><?= h($company->company_kana) ?>
+                    </td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $company->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $company->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $company->id], ['confirm' => __('Are you sure you want to delete # {0}?', $company->id)]) ?>
+                        <?= $this->Html->link(__('更新'), ['action' => 'edit', $company->id], [
+                            'class' => 'btn btn-sm btn-secondary'
+                        ]) ?>
+                        <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $company->id], [
+                            'confirm' => __('会社 ${0} を削除してもよろしいですか?', $company->id),
+                            'class' => 'btn btn-sm btn-danger'
+                        ]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+    <?= $this->element('paginator') ?>
 </div>

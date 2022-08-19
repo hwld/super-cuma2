@@ -20,26 +20,15 @@ class CompaniesController extends AppController
     {
         $this->paginate = [
             'contain' => ['BusinessCategories'],
+            'sortableFields' => [
+                'company_name',
+                'company_kana',
+                'BusinessCategories.business_category_name',
+            ]
         ];
         $companies = $this->paginate($this->Companies);
 
         $this->set(compact('companies'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Company id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $company = $this->Companies->get($id, [
-            'contain' => ['BusinessCategories', 'Customers'],
-        ]);
-
-        $this->set(compact('company'));
     }
 
     /**
@@ -53,13 +42,16 @@ class CompaniesController extends AppController
         if ($this->request->is('post')) {
             $company = $this->Companies->patchEntity($company, $this->request->getData());
             if ($this->Companies->save($company)) {
-                $this->Flash->success(__('The company has been saved.'));
+                $this->Flash->success(__('会社 {0} を登録しました。', $company->company_name));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The company could not be saved. Please, try again.'));
+            $this->Flash->error(__('会社を登録できませんでした。'));
         }
-        $businessCategories = $this->Companies->BusinessCategories->find('list', ['limit' => 200])->all();
+        $businessCategories = $this->Companies->BusinessCategories->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'business_category_name'
+        ])->all();
         $this->set(compact('company', 'businessCategories'));
     }
 
@@ -78,13 +70,16 @@ class CompaniesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $company = $this->Companies->patchEntity($company, $this->request->getData());
             if ($this->Companies->save($company)) {
-                $this->Flash->success(__('The company has been saved.'));
+                $this->Flash->success(__('会社を更新しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The company could not be saved. Please, try again.'));
+            $this->Flash->error(__('会社を更新できませんでした。'));
         }
-        $businessCategories = $this->Companies->BusinessCategories->find('list', ['limit' => 200])->all();
+        $businessCategories = $this->Companies->BusinessCategories->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'business_category_name'
+        ])->all();
         $this->set(compact('company', 'businessCategories'));
     }
 
@@ -100,9 +95,9 @@ class CompaniesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $company = $this->Companies->get($id);
         if ($this->Companies->delete($company)) {
-            $this->Flash->success(__('The company has been deleted.'));
+            $this->Flash->success(__('会社を削除しました。'));
         } else {
-            $this->Flash->error(__('The company could not be deleted. Please, try again.'));
+            $this->Flash->error(__('会社を削除できませんでした。'));
         }
 
         return $this->redirect(['action' => 'index']);
