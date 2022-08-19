@@ -28,15 +28,15 @@ return  [
     // Wrapper content used to hide other content.
     'hiddenBlock' => '<div style="display:none;">{{content}}</div>',
     // Generic input element.
-    'input' => '<div class="col-sm-10"><input type="{{type}}" name="{{name}}"{{attrs}}/></div>',
+    'input' => '<div class="col-sm-9"><input type="{{type}}" name="{{name}}"{{attrs}}/></div>',
     // Submit input element.
     'inputSubmit' => '<input type="{{type}}"{{attrs}}/>',
     // Container element used by control().
-    'inputContainer' => '<div class="row  is-invalid {{type}}{{required}}">{{content}}</div>',
+    'inputContainer' => '<div class="row {{type}}{{required}}">{{content}}</div>',
     // Container element used by control() when a field has an error.
     'inputContainerError' => '<div class="row {{type}}{{required}}">{{content}}{{error}}</div>',
     // Label element when inputs are not nested inside the label.
-    'label' => '<div class="col-sm-2"><label{{attrs}}>{{text}}</label></div>',
+    'label' => '<div class="col-sm-3"><label{{attrs}}>{{text}}</label></div>',
     // Label element used for radio and multi-checkbox inputs.
     'nestingLabel' => '{{hidden}}<label{{attrs}}>{{input}}{{text}}</label>',
     // Legends created by allControls()
@@ -50,7 +50,7 @@ return  [
     // Option group element used in select pickers.
     'optgroup' => '<optgroup label="{{label}}"{{attrs}}>{{content}}</optgroup>',
     // Select element,
-    'select' => '<div class="col-sm-10"><select name="{{name}}"{{attrs}}>{{content}}</select></div>',
+    'select' => '<div class="col-sm-9"><select name="{{name}}"{{attrs}}>{{content}}</select></div>',
     // Multi-select element,
     'selectMultiple' => '<select name="{{name}}[]" multiple="multiple"{{attrs}}>{{content}}</select>',
     // Radio input element,

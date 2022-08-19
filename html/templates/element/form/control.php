@@ -8,5 +8,5 @@
         'text' => $field_text,
         'class' => 'col-form-label',
     ],
-    'class' => 'form-control ' . ($this->Form->isFieldError('business_category_name') ? 'is-invalid' : ''),
+    'class' => 'form-control ' . ($this->Form->isFieldError($field_name) ? 'is-invalid' : ''),
 ]); 

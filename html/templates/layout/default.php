@@ -42,7 +42,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         .required label:after {
             content: '*';
             color: red;
-            font-size: 1.25rem;
         }
     </style>
 </head>
