@@ -22,7 +22,7 @@
                     </th>
                     <th><?= $this->Paginator->sort('company_kana', '会社名(カナ)') ?>
                     </th>
-                    <th class="actions"><?= __('操作') ?>
+                    <th><?= __('操作') ?>
                     </th>
                 </tr>
             </thead>

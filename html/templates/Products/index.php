@@ -5,46 +5,43 @@
  */
 ?>
 <div class="products index content">
-    <?= $this->Html->link(__('New Product'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Products') ?></h3>
-    <div class="table-responsive">
-        <table>
-            <thead>
+    <h3><?= __('製品一覧') ?>
+    </h3>
+    <div class="text-end">
+        <?= $this->Html->link('追加', ['action' => 'add'], ['class' => 'btn btn-primary py-1 px-3']) ?>
+    </div>
+    <div class="table-responsive mt-2">
+        <table class="table table-bordered">
+            <thead class="table-light">
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('product_name') ?></th>
-                    <th><?= $this->Paginator->sort('unit_price') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <th><?= $this->Paginator->sort('product_name', '製品名') ?>
+                    </th>
+                    <th><?= $this->Paginator->sort('unit_price','単価') ?>
+                    </th>
+                    <th><?= __('操作') ?>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($products as $product): ?>
                 <tr>
-                    <td><?= $this->Number->format($product->id) ?></td>
-                    <td><?= h($product->product_name) ?></td>
-                    <td><?= $this->Number->format($product->unit_price) ?></td>
-                    <td><?= h($product->created) ?></td>
-                    <td><?= h($product->modified) ?></td>
+                    <td><?= h($product->product_name) ?>
+                    </td>
+                    <td><?= $this->Number->format($product->unit_price) ?>
+                    </td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $product->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $product->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $product->id], ['confirm' => __('Are you sure you want to delete # {0}?', $product->id)]) ?>
+                        <?= $this->Html->link(__('更新'), ['action' => 'edit', $product->id], [
+                            'class' => 'btn btn-sm btn-secondary'
+                        ]) ?>
+                        <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $product->id], [
+                            'confirm' => __('製品 {0} を削除してもよろしいですか?', $product->id),
+                            'class' => 'btn btn-sm btn-danger'
+                        ])?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+    <?= $this->element('paginator') ?>
 </div>
