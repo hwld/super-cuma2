@@ -33,23 +33,6 @@ class SalesController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Sale id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $sale = $this->Sales->get($id, [
-            'contain' => ['Customers', 'Products'],
-        ]);
-        $sale->purchase_date;
-
-        $this->set(compact('sale'));
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
