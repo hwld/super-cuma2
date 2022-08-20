@@ -51,11 +51,9 @@ class CustomersTable extends Table
 
         $this->belongsTo('Companies', [
             'foreignKey' => 'company_id',
-            'joinType' => 'INNER',
         ]);
         $this->belongsTo('Prefectures', [
             'foreignKey' => 'prefecture_id',
-            'joinType' => 'INNER',
         ]);
         $this->hasMany('Sales', [
             'foreignKey' => 'customer_id',

@@ -39,7 +39,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('script') ?>
 
     <style>
-        .required label:after {
+        .required .col-form-label:after {
             content: '*';
             color: red;
         }

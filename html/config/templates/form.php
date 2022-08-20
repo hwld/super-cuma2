@@ -10,7 +10,7 @@ return  [
     // Wrapper container for checkboxes.
     'checkboxWrapper' => '<div class="checkbox">{{label}}</div>',
     // Error message wrapper elements.
-    'error' => '<input class="is-invalid" hidden></input><div class="error-message invalid-feedback" id="{{id}}">{{content}}</div>',
+    'error' => '<div class="col-sm-3"></div><div class="col-sm-9"><input class="is-invalid" hidden><div class="error-message invalid-feedback mt-0" id="{{id}}">{{content}}</div></div>',
     // Container for error items.
     'errorList' => '<ul>{{content}}</ul>',
     // Error item wrapper.
@@ -38,7 +38,7 @@ return  [
     // Label element when inputs are not nested inside the label.
     'label' => '<div class="col-sm-3"><label{{attrs}}>{{text}}</label></div>',
     // Label element used for radio and multi-checkbox inputs.
-    'nestingLabel' => '{{hidden}}<label{{attrs}}>{{input}}{{text}}</label>',
+    'nestingLabel' => '<div>{{hidden}}{{input}}<label{{attrs}}>{{text}}</label></div>',
     // Legends created by allControls()
     'legend' => '<legend>{{text}}</legend>',
     // Multi-Checkbox input set title element.
@@ -65,4 +65,5 @@ return  [
     'confirmJs' => '{{confirm}}',
     // selected class
     'selectedClass' => 'selected',
+    'radioFormGroup' => '{{label}}<div class="col-sm-9">{{input}}</div>',
 ];

@@ -53,14 +53,22 @@ class CustomersController extends AppController
         if ($this->request->is('post')) {
             $customer = $this->Customers->patchEntity($customer, $this->request->getData());
             if ($this->Customers->save($customer)) {
-                $this->Flash->success(__('The customer has been saved.'));
+                $this->Flash->success(__('顧客を登録しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The customer could not be saved. Please, try again.'));
+            $this->Flash->error(__('顧客を登録できませんでした。'));
         }
-        $companies = $this->Customers->Companies->find('list', ['limit' => 200])->all();
-        $prefectures = $this->Customers->Prefectures->find('list', ['limit' => 200])->all();
+
+        $companies = $this->Customers->Companies->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'company_name'
+        ])->all();
+
+        $prefectures = $this->Customers->Prefectures->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'pref_name'
+        ])->all();
         $this->set(compact('customer', 'companies', 'prefectures'));
     }
 
@@ -79,14 +87,23 @@ class CustomersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $customer = $this->Customers->patchEntity($customer, $this->request->getData());
             if ($this->Customers->save($customer)) {
-                $this->Flash->success(__('The customer has been saved.'));
+                $this->Flash->success(__('顧客を更新しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The customer could not be saved. Please, try again.'));
+            $this->Flash->error(__('顧客を更新できませんでした。'));
         }
-        $companies = $this->Customers->Companies->find('list', ['limit' => 200])->all();
-        $prefectures = $this->Customers->Prefectures->find('list', ['limit' => 200])->all();
+
+        $companies = $this->Customers->Companies->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'company_name'
+        ])->all();
+
+        $prefectures = $this->Customers->Prefectures->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'pref_name'
+        ])->all();
+
         $this->set(compact('customer', 'companies', 'prefectures'));
     }
 
@@ -102,9 +119,9 @@ class CustomersController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $customer = $this->Customers->get($id);
         if ($this->Customers->delete($customer)) {
-            $this->Flash->success(__('The customer has been deleted.'));
+            $this->Flash->success(__('顧客を削除しました。'));
         } else {
-            $this->Flash->error(__('The customer could not be deleted. Please, try again.'));
+            $this->Flash->error(__('顧客を削除できませんでした。'));
         }
 
         return $this->redirect(['action' => 'index']);
