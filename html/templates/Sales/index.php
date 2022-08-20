@@ -1,54 +1,57 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Sale[]|\Cake\Collection\CollectionInterface $sales
+ * @var \App\Model\Entity\Sale[] $sales
  */
 ?>
-<div class="sales index content">
-    <?= $this->Html->link(__('New Sale'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Sales') ?></h3>
-    <div class="table-responsive">
-        <table>
-            <thead>
+<div>
+    <h3><?= __('売上一覧') ?>
+    </h3>
+    <div class="text-end">
+        <?= $this->Html->link(__('追加'), ['action' => 'add'], [
+            'class' => 'btn btn-primary px-3 py-1'
+        ]) ?>
+    </div>
+    <div class="table-responsive mt-2">
+        <table class="table table-bordered">
+            <thead class="table-light">
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('purchase_date') ?></th>
-                    <th><?= $this->Paginator->sort('customer_id') ?></th>
-                    <th><?= $this->Paginator->sort('product_id') ?></th>
-                    <th><?= $this->Paginator->sort('amount') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <th><?= $this->Paginator->sort('purchase_date', '購入日') ?>
+                    </th>
+                    <th><?= $this->Paginator->sort('Customers.name', '顧客名') ?>
+                    </th>
+                    <th><?= $this->Paginator->sort('Products.product_name', '製品名') ?>
+                    </th>
+                    <th><?= $this->Paginator->sort('amount', '個数') ?>
+                    </th>
+                    <th><?= __('操作') ?>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($sales as $sale): ?>
                 <tr>
-                    <td><?= $this->Number->format($sale->id) ?></td>
-                    <td><?= h($sale->purchase_date) ?></td>
-                    <td><?= $sale->has('customer') ? $this->Html->link($sale->customer->name, ['controller' => 'Customers', 'action' => 'view', $sale->customer->id]) : '' ?></td>
-                    <td><?= $sale->has('product') ? $this->Html->link($sale->product->id, ['controller' => 'Products', 'action' => 'view', $sale->product->id]) : '' ?></td>
-                    <td><?= $this->Number->format($sale->amount) ?></td>
-                    <td><?= h($sale->created) ?></td>
-                    <td><?= h($sale->modified) ?></td>
-                    <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $sale->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $sale->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $sale->id], ['confirm' => __('Are you sure you want to delete # {0}?', $sale->id)]) ?>
+                    <td><?= $sale->purchase_date->i18nFormat('y-MM-d') ?>
+                    </td>
+                    <td><?= $sale->has('customer') ? h($sale->customer->name) : '不明' ?>
+                    </td>
+                    <td><?= $sale->has('product') ? h($sale->product->product_name) : '' ?>
+                    </td>
+                    <td><?= $this->Number->format($sale->amount) ?>
+                    </td>
+                    <td>
+                        <?= $this->Html->link(__('更新'), ['action' => 'edit', $sale->id], [
+                            'class' => 'btn btn-sm btn-secondary'
+                        ]) ?>
+                        <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $sale->id], [
+                            'confirm' => __('売上情報を削除してもよろしいですか?', $sale->id),
+                            'class' => 'btn btn-sm btn-danger'
+                        ]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+    <?= $this->element('paginator') ?>
 </div>

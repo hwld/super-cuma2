@@ -12,5 +12,4 @@
         'action_text' => '登録',
         'customer' => $customer
     ]) ?>
-    <div style="height: 100px;"></div>
 </div>

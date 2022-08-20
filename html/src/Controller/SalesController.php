@@ -20,6 +20,12 @@ class SalesController extends AppController
     {
         $this->paginate = [
             'contain' => ['Customers', 'Products'],
+            'sortableFields' => [
+                'purchase_date',
+                'Customers.name',
+                'Products.product_name',
+                'amount',
+            ],
         ];
         $sales = $this->paginate($this->Sales);
 
@@ -38,6 +44,7 @@ class SalesController extends AppController
         $sale = $this->Sales->get($id, [
             'contain' => ['Customers', 'Products'],
         ]);
+        $sale->purchase_date;
 
         $this->set(compact('sale'));
     }
@@ -53,14 +60,20 @@ class SalesController extends AppController
         if ($this->request->is('post')) {
             $sale = $this->Sales->patchEntity($sale, $this->request->getData());
             if ($this->Sales->save($sale)) {
-                $this->Flash->success(__('The sale has been saved.'));
+                $this->Flash->success(__('売上を登録しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The sale could not be saved. Please, try again.'));
+            $this->Flash->error(__('売上を登録できませんでした。'));
         }
-        $customers = $this->Sales->Customers->find('list', ['limit' => 200])->all();
-        $products = $this->Sales->Products->find('list', ['limit' => 200])->all();
+        $customers = $this->Sales->Customers->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'name'
+        ])->all();
+        $products = $this->Sales->Products->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'product_name'
+        ])->all();
         $this->set(compact('sale', 'customers', 'products'));
     }
 
@@ -79,14 +92,20 @@ class SalesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $sale = $this->Sales->patchEntity($sale, $this->request->getData());
             if ($this->Sales->save($sale)) {
-                $this->Flash->success(__('The sale has been saved.'));
+                $this->Flash->success(__('売上を更新しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The sale could not be saved. Please, try again.'));
+            $this->Flash->error(__('売上を更新できませんでした。'));
         }
-        $customers = $this->Sales->Customers->find('list', ['limit' => 200])->all();
-        $products = $this->Sales->Products->find('list', ['limit' => 200])->all();
+        $customers = $this->Sales->Customers->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'name'
+        ])->all();
+        $products = $this->Sales->Products->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'product_name'
+        ])->all();
         $this->set(compact('sale', 'customers', 'products'));
     }
 
@@ -102,9 +121,9 @@ class SalesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $sale = $this->Sales->get($id);
         if ($this->Sales->delete($sale)) {
-            $this->Flash->success(__('The sale has been deleted.'));
+            $this->Flash->success(__('売上を削除しました。'));
         } else {
-            $this->Flash->error(__('The sale could not be deleted. Please, try again.'));
+            $this->Flash->error(__('売上を削除できませんでした。'));
         }
 
         return $this->redirect(['action' => 'index']);

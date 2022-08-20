@@ -93,6 +93,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <div class="container pt-3">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
+            <div style="height: 100px;"></div>
         </div>
     </main>
     <footer>
