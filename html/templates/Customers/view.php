@@ -17,7 +17,7 @@
         ]) ?>
     </div>
     <div class="table-responsive mt-2">
-        <table class="table table-bordered">
+        <table class="table table-sm table-bordered">
             <tr>
                 <th class="table-light"><?= __('顧客コード') ?>
                 </th>

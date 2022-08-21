@@ -11,7 +11,7 @@
         <?= $this->Html->link('追加', ['action' => 'add'], ['class' => 'btn btn-primary py-1 px-3']) ?>
     </div>
     <div class="table-responsive mt-2">
-        <table class="table table-bordered">
+        <table class="table table-sm table-bordered">
             <thead class="table-light">
                 <tr>
                     <th><?= $this->Paginator->sort('product_name', '製品名') ?>

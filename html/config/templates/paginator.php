@@ -12,9 +12,9 @@ return [
     'number' => '<li class="page-item"><a class="page-link" href="{{url}}">{{text}}</a></li>',
     'current' => '<li class="page-item active"><a class="page-link" href="">{{text}}</a></li>',
     'ellipsis' => '<li class="page-item ellipsis">&hellip;</li>',
-    'sort' => '<a href="{{url}}">{{text}}</a>',
-    'sortAsc' => '<a class="asc" href="{{url}}">{{text}}▲</a>',
-    'sortDesc' => '<a class="desc" href="{{url}}">{{text}}▼</a>',
+    'sort' => '<a class="sort d-flex justify-content-between align-items-center" href="{{url}}">{{text}}<img src="/img/selector.svg" width="20px" height="20px"/></a></div>',
+    'sortAsc' => '<a class=" d-flex justify-content-between align-items-center sort asc" href="{{url}}">{{text}}<img src="/img/chevron-up.svg" width="20px" height="20px"/></a>',
+    'sortDesc' => '<a class="d-flex justify-content-between align-items-center sort desc" href="{{url}}">{{text}}<img src="/img/chevron-down.svg" width="20px" height="20px"/></a>',
     'sortAscLocked' => '<a class="asc locked" href="{{url}}">{{text}}</a>',
     'sortDescLocked' => '<a class="desc locked" href="{{url}}">{{text}}</a>',
 ];

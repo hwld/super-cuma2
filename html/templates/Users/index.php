@@ -14,8 +14,8 @@
         ]) ?>
     </div>
     <div class="table-responsive mt-2">
-        <table class="table table-bordered">
-            <thead>
+        <table class="table table-sm table-bordered">
+            <thead class="table-light">
                 <tr>
                     <th><?= $this->Paginator->sort('username', 'ユーザー名') ?>
                     </th>

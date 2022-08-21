@@ -32,7 +32,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
     <?= $this->Html->css('/bootstrap/css/bootstrap') ?>
-    <?= $this->Html->script('/bootstrap/js/bootstrap') ?>
+    <?= $this->Html->script('/bootstrap/js/bootstrap', ['defer' => true]) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -43,12 +43,21 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             content: '*';
             color: red;
         }
+
+        a.sort {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        table * {
+            white-space: nowrap;
+        }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <div class="container">
+        <div class="container-lg">
             <a class="navbar-brand" href="/customers">顧客管理システム</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +99,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </div>
     </nav>
     <main class="main">
-        <div class="container pt-3">
+        <div class="container-lg pt-3">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
             <div style="height: 100px;"></div>

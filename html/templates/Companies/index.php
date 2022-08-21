@@ -13,7 +13,7 @@
         ]) ?>
     </div>
     <div class="table-responsive mt-2">
-        <table class="table table-bordered">
+        <table class="table table-sm table-bordered">
             <thead class="table-light">
                 <tr>
                     <th><?= $this->Paginator->sort('BusinessCategories.business_category_name', '業種') ?>
