@@ -23,10 +23,10 @@
             h($user->username),
             $this->Html->link(__('更新'), ['action' => 'edit', $user->id], [
                 'class' => 'btn btn-sm btn-secondary'
-            ]).' '.
+            ]).
              $this->Form->postLink(__('削除'), ['action' => 'delete', $user->id], [
                 'confirm' => __('ユーザー {0} を削除してもよろしいですか?', $user->username),
-                'class' => 'btn btn-sm btn-danger'
+                'class' => 'btn btn-sm btn-danger ms-1'
             ])
         ])->toArray(),
     ]) ?>

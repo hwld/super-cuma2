@@ -37,10 +37,10 @@
             ]).' '.
             $this->Html->link(__('更新'), ['action' => 'edit', $customer->id], [
                 'class' => 'btn btn-sm btn-secondary'
-            ]).' '.
+            ]).
             $this->Form->postLink(__('削除'), ['action' => 'delete', $customer->id], [
                 'confirm' => __('顧客 "{0}" を削除してもよろしいですか?', $customer->name),
-                'class' => 'btn btn-sm btn-danger'
+                'class' => 'btn btn-sm btn-danger ms-1'
             ])
         ])->toArray(),
     ]) ?>

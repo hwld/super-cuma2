@@ -22,10 +22,10 @@
                 $this->Number->format($product->unit_price),
                 $this->Html->link('更新', ['action' => 'edit', $product->id],[
                     'class' => 'btn btn-sm btn-secondary'
-                ]).' '.
+                ]).
                 $this->Form->postLink(__('削除'), ['action' => 'delete', $product->id], [
                     'confirm' => __('製品 {0} を削除してもよろしいですか?', $product->id),
-                    'class' => 'btn btn-sm btn-danger'
+                    'class' => 'btn btn-sm btn-danger ms-1'
                 ])
             ])->toArray()
     ]) ?>

@@ -28,10 +28,10 @@
             $this->Number->format($sale->amount),
             $this->Html->link(__('更新'), ['action' => 'edit', $sale->id], [
                 'class' => 'btn btn-sm btn-secondary'
-            ]).' '.
+            ]).
             $this->Form->postLink(__('削除'), ['action' => 'delete', $sale->id], [
                 'confirm' => __('売上情報を削除してもよろしいですか?', $sale->id),
-                'class' => 'btn btn-sm btn-danger'
+                'class' => 'btn btn-sm btn-danger ms-1'
             ])
         ])->toArray(),
     ]) ?>

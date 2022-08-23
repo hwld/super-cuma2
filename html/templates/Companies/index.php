@@ -26,10 +26,10 @@
             h($company->company_kana),
             $this->Html->link(__('更新'), ['action' => 'edit', $company->id], [
                 'class' => 'btn btn-sm btn-secondary'
-            ]).' '.
+            ]).
             $this->Form->postLink(__('削除'), ['action' => 'delete', $company->id], [
                 'confirm' => __('会社 ${0} を削除してもよろしいですか?', $company->id),
-                'class' => 'btn btn-sm btn-danger'
+                'class' => 'btn btn-sm btn-danger ms-1'
             ])
         ])->toArray(),
     ]) ?>
