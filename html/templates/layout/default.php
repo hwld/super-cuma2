@@ -86,9 +86,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                             データ集計
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">業種ごとの顧客数</a></li>
-                            <li><a class="dropdown-item" href="#">製品別売上ランキング</a></li>
-                            <li><a class="dropdown-item" href="#">平均客単価</a></li>
+                            <li><a class="dropdown-item" href="/datatotals/customers-by-industry">業種ごとの顧客数</a></li>
+                            <li><a class="dropdown-item" href="/datatotals/sales-ranking-by-product">製品別売上ランキング</a></li>
+                            <li><a class="dropdown-item" href="/datatotals/avg-customer-unit-price">平均客単価</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
