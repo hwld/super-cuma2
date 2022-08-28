@@ -42,7 +42,7 @@ class ProductsTable extends Table
         parent::initialize($config);
 
         $this->setTable('products');
-        $this->setDisplayField('id');
+        $this->setDisplayField('product_name');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');

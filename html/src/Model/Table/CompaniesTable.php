@@ -43,7 +43,7 @@ class CompaniesTable extends Table
         parent::initialize($config);
 
         $this->setTable('companies');
-        $this->setDisplayField('id');
+        $this->setDisplayField('company_name');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');

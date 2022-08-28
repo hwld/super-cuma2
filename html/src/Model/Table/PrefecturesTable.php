@@ -42,7 +42,7 @@ class PrefecturesTable extends Table
         parent::initialize($config);
 
         $this->setTable('prefectures');
-        $this->setDisplayField('id');
+        $this->setDisplayField('pref_name');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');

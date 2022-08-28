@@ -42,7 +42,7 @@ class BusinessCategoriesTable extends Table
         parent::initialize($config);
 
         $this->setTable('business_categories');
-        $this->setDisplayField('id');
+        $this->setDisplayField('business_category_name');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');

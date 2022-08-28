@@ -60,15 +60,9 @@ class CustomersController extends AppController
             $this->Flash->error(__('顧客を登録できませんでした。'));
         }
 
-        $companies = $this->Customers->Companies->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'company_name'
-        ])->all();
+        $companies = $this->Customers->Companies->find('list')->all();
+        $prefectures = $this->Customers->Prefectures->find('list')->all();
 
-        $prefectures = $this->Customers->Prefectures->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'pref_name'
-        ])->all();
         $this->set(compact('customer', 'companies', 'prefectures'));
     }
 
@@ -94,15 +88,8 @@ class CustomersController extends AppController
             $this->Flash->error(__('顧客を更新できませんでした。'));
         }
 
-        $companies = $this->Customers->Companies->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'company_name'
-        ])->all();
-
-        $prefectures = $this->Customers->Prefectures->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'pref_name'
-        ])->all();
+        $companies = $this->Customers->Companies->find('list')->all();
+        $prefectures = $this->Customers->Prefectures->find('list')->all();
 
         $this->set(compact('customer', 'companies', 'prefectures'));
     }

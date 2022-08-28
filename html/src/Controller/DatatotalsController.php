@@ -12,32 +12,33 @@ class DatatotalsController extends AppController {
         $query = $this->getBusinessCategories()->find()
             ->leftJoinWith('Companies.Customers');
 
-        $query->select([
+        $customersByIndustry =  $query->select([
             'business_category_name' => 'BusinessCategories.business_category_name',
             'count' => $query->func()->count('DISTINCT Customers.id')
         ])
-        ->group('BusinessCategories.id');
-        
-        $this->set('customersByIndustry', $query->all());
+        ->group('BusinessCategories.id')
+        ->all();
+    
+        $this->set('customersByIndustry', $customersByIndustry);
     }
 
     public function salesRankingByProduct()
     {
-        $rankingQuery = $this->getProducts()->find()
+        $query = $this->getProducts()->find()
             ->leftJoinWith('Sales');
 
-        $ranking = $rankingQuery->select([
+        $ranking = $query->select([
             'product_name',
             'unit_price',
-            'total_quantity' => $rankingQuery->newExpr()->add('
-                IFNULL(SUM(Sales.amount), 0)
-            '),
-            'total_price' => $rankingQuery->newExpr()->add('
-               IFNULL(SUM(Sales.amount) * unit_price, 0)
-            '),
-            'ranking' => $rankingQuery->newExpr()->add('
-                RANK() OVER (ORDER BY unit_price * SUM(Sales.amount) DESC )
-            ')
+            'total_quantity' => $query->newExpr()->add(
+                'IFNULL(SUM(Sales.amount), 0)'
+            ),
+            'total_price' => $query->newExpr()->add(
+                'IFNULL(SUM(Sales.amount) * unit_price, 0)'
+            ),
+            'ranking' => $query->newExpr()->add(
+                'RANK() OVER (ORDER BY unit_price * SUM(Sales.amount) DESC )'
+            )
         ])
         ->group(['Products.id'])
         ->order(['total_price' => 'DESC'])
@@ -48,15 +49,15 @@ class DatatotalsController extends AppController {
 
     public function avgCustomerUnitPrice()
     {
-        $spendQuery = $this->getCustomers()->find()
+        $query = $this->getCustomers()->find()
             ->leftJoinWith('Sales.Products');
             
-        $customerUnitPrice = $spendQuery
+        $customerUnitPrice = $query
             ->select([
                 'name',
-                'unit_price' => $spendQuery->newExpr()->add('
-                    IFNULL(SUM(Products.unit_price * Sales.amount), 0)
-                ')
+                'unit_price' => $query->newExpr()->add(
+                    'IFNULL(SUM(Products.unit_price * Sales.amount), 0)'
+                )
             ])
             ->group('Customers.id')
             ->order(['unit_price' => 'DESC'])

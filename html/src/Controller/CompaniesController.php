@@ -48,10 +48,9 @@ class CompaniesController extends AppController
             }
             $this->Flash->error(__('会社を登録できませんでした。'));
         }
-        $businessCategories = $this->Companies->BusinessCategories->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'business_category_name'
-        ])->all();
+
+        $businessCategories = $this->Companies->BusinessCategories->find('list')->all();
+
         $this->set(compact('company', 'businessCategories'));
     }
 
@@ -76,10 +75,9 @@ class CompaniesController extends AppController
             }
             $this->Flash->error(__('会社を更新できませんでした。'));
         }
-        $businessCategories = $this->Companies->BusinessCategories->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'business_category_name'
-        ])->all();
+        
+        $businessCategories = $this->Companies->BusinessCategories->find('list')->all();
+
         $this->set(compact('company', 'businessCategories'));
     }
 

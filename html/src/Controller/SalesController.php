@@ -49,14 +49,10 @@ class SalesController extends AppController
             }
             $this->Flash->error(__('売上を登録できませんでした。'));
         }
-        $customers = $this->Sales->Customers->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'name'
-        ])->all();
-        $products = $this->Sales->Products->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'product_name'
-        ])->all();
+        
+        $customers = $this->Sales->Customers->find('list')->all();
+        $products = $this->Sales->Products->find('list')->all();
+
         $this->set(compact('sale', 'customers', 'products'));
     }
 
@@ -81,14 +77,10 @@ class SalesController extends AppController
             }
             $this->Flash->error(__('売上を更新できませんでした。'));
         }
-        $customers = $this->Sales->Customers->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'name'
-        ])->all();
-        $products = $this->Sales->Products->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'product_name'
-        ])->all();
+
+        $customers = $this->Sales->Customers->find('list')->all();
+        $products = $this->Sales->Products->find('list')->all();
+
         $this->set(compact('sale', 'customers', 'products'));
     }
 
