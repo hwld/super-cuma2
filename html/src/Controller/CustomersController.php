@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Entity\Prefecture;
+
 /**
  * Customers Controller
  *
@@ -21,9 +23,14 @@ class CustomersController extends AppController
         $this->paginate = [
             'contain' => ['Companies', 'Prefectures'],
         ];
-        $customers = $this->paginate($this->Customers);
 
-        $this->set(compact('customers'));
+        $customers = $this->paginate($this->Customers);
+        $prefectures = $this->Customers->Prefectures->find('list')->all();
+
+        $this->set([
+            'customers' => $customers,
+            'prefectures' => $prefectures
+        ]);
     }
 
     /**
