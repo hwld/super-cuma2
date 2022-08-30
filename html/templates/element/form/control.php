@@ -8,7 +8,7 @@
 
 $attr = isset($options) && is_array($options) ? $options : [];
 
-$input_type_class = match (isset($attr['type']) ? $attr['type'] : '') {
+$input_type_class = match ($attr['type'] ?? '') {
     'select' => 'form-select',
     'radio' => 'form-check-input',
     default => 'form-control',

@@ -3,6 +3,10 @@
  * @var \App\View\AppView $this
  * @var \Cake\Collection\CollectionInterface $customers
  */
+
+use App\Templator\FormTemplator;
+
+$this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
 ?>
 <div>
     <h3><?= __('顧客一覧') ?>
@@ -18,28 +22,30 @@
             'valueSources' => ['query'],
         ]) ?>
         <div class="row">
-            <div class="col-6">
-                <?= $this->element('form/control', [
+            <div class="col-md-6">
+                <div>
+                    <?= $this->element('form/control', [
                         'field_name' => 'customer_cd',
                         'field_text' => '顧客コード'
                     ]) ?>
+                </div>
                 <div class="mt-2"></div>
                 <?= $this->element('form/control', [
                         'field_name' => 'name',
                         'field_text' => '顧客名'
-                    ]) ?>
+                ]) ?>
                 <div class="mt-2"></div>
                 <?= $this->element('form/control', [
                         'field_name' => 'kana',
                         'field_text' => '顧客名(カナ)'
-                    ]) ?>
+                ]) ?>
                 <div class="mt-2"></div>
                 <?= $this->element('form/control', [
                         'field_name' => 'company_name',
                         'field_text' => '会社名',
-                    ]) ?>
+                ]) ?>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
                 <?= $this->element('form/control', [
                         'field_name' => 'pref_name',
                         'field_text' => '都道府県',
@@ -47,22 +53,22 @@
                             'type' => 'select',
                             'options' => $prefectures
                         ]
-                    ]) ?>
+                ]) ?>
                 <div class="mt-2"></div>
                 <?= $this->element('form/control', [
                         'field_name' => 'phone',
                         'field_text' => '電話番号'
-                    ]) ?>
+                ]) ?>
                 <div class="mt-2"></div>
                 <?= $this->element('form/control', [
                         'field_name' => 'email',
                         'field_text' => 'メールアドレス'
-                    ]) ?>
+                ]) ?>
                 <div class="mt-2"></div>
                 <?= $this->element('form/control', [
                         'field_name' => 'lasttrade',
                         'field_text' => '最終取引日'
-                    ]) ?>
+                ]) ?>
             </div>
         </div>
         <div class="mt-2">
@@ -71,9 +77,11 @@
         </div>
         <?= $this->Form->end() ?>
     </div>
+
     <div class="text-end mt-3">
         <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary px-3 py-1']) ?>
     </div>
+
     <div class="mt-2"></div>
     <?= $this->element('table',[
         'headers' => [
