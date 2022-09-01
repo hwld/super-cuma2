@@ -2,6 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \Cake\Collection\CollectionInterface $customers
+ * @var Cake\Collection\CollectionInterface $prefectures
  */
 
 use App\Templator\FormTemplator;
@@ -16,7 +17,7 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
             顧客検索
         </div>
         <?= $this->Form->create(null, [
-            'class' => 'card-body',
+            'class' => 'card-body mb-0',
             'novalidate' => true,
             'type' => 'get',
             'valueSources' => ['query'],
@@ -47,11 +48,11 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
             </div>
             <div class="col-md-6">
                 <?= $this->element('form/control', [
-                        'field_name' => 'pref_name',
+                        'field_name' => 'pref_id',
                         'field_text' => '都道府県',
                         'options' => [
                             'type' => 'select',
-                            'options' => $prefectures
+                            'options' => ['' => ''] + $prefectures->toArray()
                         ]
                 ]) ?>
                 <div class="mt-2"></div>
@@ -65,14 +66,26 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
                         'field_text' => 'メールアドレス'
                 ]) ?>
                 <div class="mt-2"></div>
-                <?= $this->element('form/control', [
-                        'field_name' => 'lasttrade',
-                        'field_text' => '最終取引日'
-                ]) ?>
+                <div class="row">
+                    <?= $this->Form->label('lasttrade_start', '最終取引日', ['class' => "col-form-label"]) ?>
+                    <div class="d-flex align-items-center justify-content-stretch">
+                        <div class="flex-grow-1">
+                            <?= $this->Form->date('lasttrade_start', ['class' => "form-control flex-grow-1"]) ?>
+                        </div>
+                        <div class="mx-2">～</div>
+                        <div class="flex-grow-1">
+                            <?= $this->Form->date('lasttrade_end', ['class' => "form-control flex-grow-1"]) ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="mt-2">
-            <?= $this->Form->button('検索', ['class' => 'btn btn-sm btn-primary px-3']) ?>
+        <div class="mt-3">
+            <?= $this->Form->button('検索', [
+                'class' => 'btn btn-sm btn-primary px-3',
+                'name' => 'action',
+                'value' => 'search'
+            ]) ?>
             <?= $this->Html->link('クリア', ['action' => 'index'], ['class' => 'btn btn-sm btn-light border px-3'])?>
         </div>
         <?= $this->Form->end() ?>
