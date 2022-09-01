@@ -2,6 +2,7 @@
 
 return (new PhpCsFixer\Config())
     ->setRules([
+        '@PSR12' => true,
         'no_extra_blank_lines' => [
             'tokens' => [
                 'curly_brace_block',
