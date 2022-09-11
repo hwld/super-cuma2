@@ -94,6 +94,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <li class="nav-item">
                         <a class="nav-link" href="/users">ユーザー</a>
                     </li>
+                    <li>
+                        <?= $this->Form->create(null, [
+                            'url' => [
+                                'controller' => 'Users',
+                                'action' => 'logout'
+                            ]
+                        ]) ?>
+                        <form class="d-flex" action="/users/logout" method="POST">
+                            <button class="btn btn-outline-secondary" type="submit">ログアウト</button>
+                        </form>
+                        <?= $this->Form->end() ?>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -3,7 +3,7 @@
  * @var App\View\AppView $this
  */
 ?>
-<div class="card">
+<div class="card w-100">
     <h5 class="card-header">
         <?= $this->fetch('title') ?>
     </h5>

@@ -1,7 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
+
+use App\Firebase;
+use Cake\Event\EventInterface;
+use Kreait\Firebase\Factory;
 
 /**
  * Users Controller
@@ -11,6 +16,52 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
+
+    public function login()
+    {
+        $serviceAccount = Firebase::getServiceAccountPath();
+        $auth = (new Factory())->withServiceAccount($serviceAccount)->createAuth();
+
+        $this->viewBuilder()->setLayout('login');
+
+        $result = $this->Authentication->getResult();
+        if ($result->isValid()) {
+            $target = $this->Authentication->getLoginRedirect() ?? '/customers';
+            return $this->redirect($target);
+        }
+
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            $idToken = $data['idToken'];
+            $verifiedIdToken = $auth->verifyIdToken($idToken);
+            $uid = $verifiedIdToken->claims()->get('sub');
+
+            // $uidを持つユーザーがいればそのユーザーをSessionに入れる。
+            $user = $this->Users->find()->where(['uid' => $uid])->first();
+            if ($user) {
+                $this->Authentication->setIdentity($user);
+                $target = $this->Authentication->getLoginRedirect() ?? '/customers';
+            } else {
+                // TODO
+                // uidを持つユーザーが存在しなければ、ユーザーを登録する
+            }
+
+            return $this->response->withStringBody(json_encode(['ok' => true]));
+        }
+    }
+
+    public function logout()
+    {
+        $this->Authentication->logout();
+        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+    }
+
     /**
      * Index method
      *
