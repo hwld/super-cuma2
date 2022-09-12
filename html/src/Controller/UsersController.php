@@ -25,9 +25,6 @@ class UsersController extends AppController
 
     public function login()
     {
-        $serviceAccount = Firebase::getServiceAccountPath();
-        $auth = (new Factory())->withServiceAccount($serviceAccount)->createAuth();
-
         $this->viewBuilder()->setLayout('login');
 
         $result = $this->Authentication->getResult();
@@ -37,6 +34,9 @@ class UsersController extends AppController
         }
 
         if ($this->request->is('post')) {
+            $serviceAccount = Firebase::getServiceAccountPath();
+            $auth = (new Factory())->withServiceAccount($serviceAccount)->createAuth();
+
             $data = $this->request->getData();
             $idToken = $data['idToken'];
             $verifiedIdToken = $auth->verifyIdToken($idToken);
@@ -48,11 +48,13 @@ class UsersController extends AppController
                 $this->Authentication->setIdentity($user);
                 $target = $this->Authentication->getLoginRedirect() ?? '/customers';
             } else {
-                // TODO
                 // uidを持つユーザーが存在しなければ、ユーザーを登録する
+                $firebase_user = $auth->getUser($uid);
+                $username = $firebase_user->displayName;
             }
 
-            return $this->response->withStringBody(json_encode(['ok' => true]));
+            $target = $this->Authentication->getLoginRedirect() ?? '/customers';
+            return $this->redirect($target);
         }
     }
 

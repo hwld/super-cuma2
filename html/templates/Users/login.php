@@ -3,10 +3,61 @@
  * @var App\View\AppView $this
  */
 ?>
+<?php $this->start('css') ?>
+<style>
+    /* 通常のボタン */
+    #google-signin-btn {
+        padding: 0px;
+        border: 0px;
+        background-color: transparent;
+        outline: none;
+    }
+
+    #google-signin-btn>.focus {
+        display: none;
+    }
+
+    #google-signin-btn>.active {
+        display: none;
+    }
+
+    /* フォーカスされている状態のボタン */
+    #google-signin-btn:focus>.normal {
+        display: none;
+    }
+
+    #google-signin-btn:focus>.focus {
+        display: inline-block;
+    }
+
+    #google-signin-btn:focus>.active {
+        display: none;
+    }
+
+
+    /* アクティブ状態のボタン */
+    #google-signin-btn:active>.normal {
+        display: none;
+    }
+
+    #google-signin-btn:active>.focus {
+        display: none;
+    }
+
+    #google-signin-btn:active>.active {
+        display: inline-block;
+    }
+</style>
+<?php $this->end()?>
 <div class="d-flex justify-content-center">
-    <button class="btn btn-primary google-signIn">GoogleでSignIn</button>
-    <input hidden name="csrfToken"
-        value="<?= $this->request->getAttribute('csrfToken'); ?>" />
+    <?= $this->Form->create(null, ['id' => 'google-login-form']) ?>
+    <input name="idToken" hidden />
+    <button id="google-signin-btn" type="button">
+        <img class="normal" src="/img/btn_google_signin.png" />
+        <img class="focus" src="/img/btn_google_signin_focus.png" />
+        <img class="active" src="/img/btn_google_signin_pressed.png" />
+    </button>
+    <?= $this->Form->end() ?>
 </div>
 <script type="module">
     import {
@@ -33,25 +84,18 @@
     const provider = new GoogleAuthProvider();
 
     window.onload = () => {
-        const googleSignInButton = document.querySelector('.google-signIn');
-        const csrfToken = document.querySelector('input[name="csrfToken"]').value;
+
+        const googleSignInButton = document.querySelector('#google-signin-btn');
         googleSignInButton.addEventListener('click', async () => {
             try {
                 const result = await signInWithPopup(auth, provider);
-                const idToken = result.user.accessToken;
 
-                const content = await fetch("/users/login", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': "application/json",
-                        'X-CSRF-Token': csrfToken,
-                    },
-                    body: JSON.stringify({
-                        idToken,
-                    }),
-                })
-                //　TODO: どうにかサーバー側で遷移させたい
-                window.location.reload();
+                const idToken = result.user.accessToken;
+                const idTokenInput = document.querySelector('input[name="idToken"]');
+                idTokenInput.value = idToken;
+
+                const form = document.querySelector('form');
+                form.submit();
             } catch (error) {
                 console.error(error)
             }
