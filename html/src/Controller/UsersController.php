@@ -33,6 +33,7 @@ class UsersController extends AppController
             return $this->redirect($target);
         }
 
+        // 初めてログインしたユーザーの登録処理を行う
         if ($this->request->is('post')) {
             $serviceAccount = Firebase::getServiceAccountPath();
             $auth = (new Factory())->withServiceAccount($serviceAccount)->createAuth();
@@ -42,16 +43,21 @@ class UsersController extends AppController
             $verifiedIdToken = $auth->verifyIdToken($idToken);
             $uid = $verifiedIdToken->claims()->get('sub');
 
-            // $uidを持つユーザーがいればそのユーザーをSessionに入れる。
-            $user = $this->Users->find()->where(['uid' => $uid])->first();
-            if ($user) {
-                $this->Authentication->setIdentity($user);
-                $target = $this->Authentication->getLoginRedirect() ?? '/customers';
-            } else {
-                // uidを持つユーザーが存在しなければ、ユーザーを登録する
-                $firebase_user = $auth->getUser($uid);
-                $username = $firebase_user->displayName;
-            }
+            // ユーザーを登録する
+            $firebase_user = $auth->getUser($uid);
+            $username = $firebase_user->displayName;
+            $email = $firebase_user->email;
+
+            $newUser = $this->Users->newEmptyEntity();
+            $newUser = $this->Users->patchEntity($newUser, [
+                    'username' => $username,
+                    'email' => $email,
+                    'uid' => $uid
+                ]);
+            $savedUser = $this->Users->save($newUser);
+
+            // ユーザーをセッションに保存する
+            $this->Authentication->setIdentity($savedUser);
 
             $target = $this->Authentication->getLoginRedirect() ?? '/customers';
             return $this->redirect($target);
@@ -93,26 +99,6 @@ class UsersController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $user = $this->Users->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('ユーザーを登録しました。'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('ユーザーを登録できませんでした。'));
-        }
-        $this->set(compact('user'));
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id User id.
@@ -134,7 +120,6 @@ class UsersController extends AppController
             $this->Flash->error(__('ユーザーを更新できませんでした。'));
         }
 
-        $user->set('password', '');
         $this->set(compact('user'));
     }
 

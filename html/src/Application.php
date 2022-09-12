@@ -155,20 +155,18 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             'queryParam' => 'redirect',
         ]);
 
-        // 認証者を読み込む。 まずはSessionを確認し、そのあとにloginUrlから送信されたformを確認する。
-        $service->loadAuthenticator('Authentication.Session');
-        // コントローラーに飛ばすためだけにForm Authenticatorを追加する
-        $service->loadAuthenticator('Authentication.Form', [
-            'fields' => [],
-            'loginUrl' => '/users/login'
+        // はじめにsessionから情報を読み取る。
+        // sessionに存在しない場合は作ったFirebaseAuthenticationクラスを呼び出す。
+        $service->loadAuthenticator('Authentication.Session', [
+            // この設定を使用すると、認証時に必ずidentifierを通すようになる。
+            // 今回設定しているFirebaseIdentifierはDBアクセスを行うので、パフォーマンスが悪くなるかもしれない。
+            // が、ユーザーを削除したときにそのユーザーのセッションを破棄できるというメリットはありそう？
+            'identify' => true,
+            'fields' => ['uid' => 'uid'],
         ]);
+        $service->loadAuthenticator('Firebase');
 
-        // 識別子を読み込む。 Authentication.Passwordは、fieldsのusername,passwordからUserを検索する。
-        // 識別子となるモデルを変更したい場合は、ORM Resolverを新たに作成する必要がある。
-        $service->loadIdentifier('Authentication.Password', ['fields' => [
-            IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-            IdentifierInterface::CREDENTIAL_PASSWORD => 'password'
-        ]]);
+        $service->loadIdentifier('Firebase');
 
         return $service;
     }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -11,7 +12,8 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $username
- * @property string $password
+ * @property string $email
+ * @property string $uid
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  */
@@ -28,25 +30,9 @@ class User extends Entity
      */
     protected $_accessible = [
         'username' => true,
-        'password' => true,
+        'email' => true,
+        'uid' => true,
         'created' => true,
         'modified' => true,
     ];
-
-    /**
-     * Fields that are excluded from JSON versions of the entity.
-     *
-     * @var array<string>
-     */
-    protected $_hidden = [
-        'password',
-    ];
-
-    protected function _setPassword(string $password) : ?string
-    {
-        if(strlen($password) > 0) {
-            return ( new DefaultPasswordHasher())->hash($password);
-        }
-        return null;
-    }
 }

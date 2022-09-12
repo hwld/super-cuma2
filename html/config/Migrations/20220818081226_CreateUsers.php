@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Migrations\AbstractMigration;
@@ -15,10 +16,9 @@ class CreateUsers extends AbstractMigration
     public function change()
     {
         $this->table('users')
-        ->addColumn('username', 'string', [
-            'limit' => 50
-        ])
-        ->addColumn('password', 'string')
+        ->addColumn('username', 'string')
+        ->addColumn('email', 'string')
+        ->addColumn('uid', 'string')
         ->addColumn('created', 'datetime')
         ->addColumn('modified', 'datetime')
         ->create();

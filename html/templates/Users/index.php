@@ -8,19 +8,16 @@
 
     <h3><?= __('ユーザー一覧') ?>
     </h3>
-    <div class="text-end">
-        <?= $this->Html->link(__('追加'), ['action' => 'add'], [
-            'class' => 'btn btn-primary px-3 py-1'
-        ]) ?>
-    </div>
-    <div class="mt-2"></div>
-    <?= $this->element('table',[
+    <div class="mt-4"></div>
+    <?= $this->element('table', [
         'headers' => [
             $this->Paginator->sort('username', 'ユーザー名'),
+            $this->Paginator->sort('email', 'メールアドレス'),
             '操作'
         ],
-        'rowCells' => $users->map(fn($user)=>[
+        'rowCells' => $users->map(fn ($user) =>[
             h($user->username),
+            h($user->email),
             $this->Html->link(__('更新'), ['action' => 'edit', $user->id], [
                 'class' => 'btn btn-sm btn-secondary'
             ]).

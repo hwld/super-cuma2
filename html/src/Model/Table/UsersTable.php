@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -56,15 +57,18 @@ class UsersTable extends Table
     {
         $validator
             ->scalar('username')
-            ->maxLength('username', 50)
             ->requirePresence('username', 'create')
             ->notEmptyString('username');
 
         $validator
-            ->scalar('password')
-            ->maxLength('password', 255)
-            ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+            ->scalar('email')
+            ->requirePresence('email', 'create')
+            ->notEmptyString('email');
+
+        $validator
+            ->scalar('uid')
+            ->requirePresence('uid', 'create')
+            ->notEmptyString('uid');
 
         return $validator;
     }
@@ -78,8 +82,7 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
-
+        $rules->add($rules->isUnique(['uid']), ['errorField' => 'uid']);
         return $rules;
     }
 }
