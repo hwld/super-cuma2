@@ -25,6 +25,8 @@ class UsersController extends AppController
 
     public function login()
     {
+        $this->Authorization->skipAuthorization();
+
         $this->viewBuilder()->setLayout('login');
 
         $result = $this->Authentication->getResult();
@@ -52,13 +54,17 @@ class UsersController extends AppController
             $newUser = $this->Users->patchEntity($newUser, [
                     'username' => $username,
                     'email' => $email,
+                    'isAdmin' => false,
                     'uid' => $uid
-                ]);
+            ], [
+                'accessibleFields' => ['isAdmin' => true],
+            ]);
             $savedUser = $this->Users->save($newUser);
 
             // ユーザーをセッションに保存する
             $this->Authentication->setIdentity($savedUser);
 
+            $this->Flash->success('ユーザーを登録しました。');
             $target = $this->Authentication->getLoginRedirect() ?? '/customers';
             return $this->redirect($target);
         }
@@ -66,6 +72,8 @@ class UsersController extends AppController
 
     public function logout()
     {
+        $this->Authorization->skipAuthorization();
+
         $this->Authentication->logout();
         return $this->redirect(['controller' => 'Users', 'action' => 'login']);
     }
@@ -77,6 +85,8 @@ class UsersController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
@@ -91,6 +101,8 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $user = $this->Users->get($id, [
             'contain' => [],
         ]);
@@ -107,6 +119,8 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $user = $this->Users->get($id, [
             'contain' => [],
         ]);
@@ -132,6 +146,8 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {

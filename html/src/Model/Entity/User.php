@@ -32,6 +32,7 @@ class User extends Entity
         'username' => true,
         'email' => true,
         'uid' => true,
+        'isAdmin' => false,
         'created' => true,
         'modified' => true,
     ];

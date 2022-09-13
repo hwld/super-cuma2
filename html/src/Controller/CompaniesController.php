@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -18,6 +19,8 @@ class CompaniesController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $this->paginate = [
             'contain' => ['BusinessCategories'],
             'sortableFields' => [
@@ -38,6 +41,8 @@ class CompaniesController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+
         $company = $this->Companies->newEmptyEntity();
         if ($this->request->is('post')) {
             $company = $this->Companies->patchEntity($company, $this->request->getData());
@@ -63,6 +68,8 @@ class CompaniesController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $company = $this->Companies->get($id, [
             'contain' => [],
         ]);
@@ -75,7 +82,7 @@ class CompaniesController extends AppController
             }
             $this->Flash->error(__('会社を更新できませんでした。'));
         }
-        
+
         $businessCategories = $this->Companies->BusinessCategories->find('list')->all();
 
         $this->set(compact('company', 'businessCategories'));
@@ -90,6 +97,8 @@ class CompaniesController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $this->request->allowMethod(['post', 'delete']);
         $company = $this->Companies->get($id);
         if ($this->Companies->delete($company)) {

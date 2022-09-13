@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -18,6 +19,8 @@ class BusinessCategoriesController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $businessCategories = $this->paginate($this->BusinessCategories, ['limit' => 10]);
 
         $this->set(compact('businessCategories'));
@@ -30,6 +33,8 @@ class BusinessCategoriesController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+
         $businessCategory = $this->BusinessCategories->newEmptyEntity();
         if ($this->request->is('post')) {
             $businessCategory = $this->BusinessCategories->patchEntity($businessCategory, $this->request->getData());
@@ -52,6 +57,8 @@ class BusinessCategoriesController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $businessCategory = $this->BusinessCategories->get($id, [
             'contain' => [],
         ]);
@@ -76,6 +83,8 @@ class BusinessCategoriesController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $this->request->allowMethod(['post', 'delete']);
         $businessCategory = $this->BusinessCategories->get($id);
         if ($this->BusinessCategories->delete($businessCategory)) {

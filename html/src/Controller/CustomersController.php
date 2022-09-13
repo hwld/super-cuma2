@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Database\Expression\QueryExpression;
+use Cake\Event\EventInterface;
 use Cake\I18n\FrozenDate;
 use Cake\ORM\Query;
 
@@ -23,6 +24,8 @@ class CustomersController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $customers_query = $this->Customers->find()->contain(['Companies', 'Prefectures']);
 
         // 検索時の処理
@@ -49,6 +52,8 @@ class CustomersController extends AppController
      */
     public function view($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $customer = $this->Customers->get($id, [
             'contain' => ['Companies', 'Prefectures', 'Sales'],
         ]);
@@ -63,6 +68,8 @@ class CustomersController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+
         $customer = $this->Customers->newEmptyEntity();
         if ($this->request->is('post')) {
             $customer = $this->Customers->patchEntity($customer, $this->request->getData());
@@ -89,6 +96,8 @@ class CustomersController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $customer = $this->Customers->get($id, [
             'contain' => [],
         ]);
@@ -117,6 +126,8 @@ class CustomersController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $this->request->allowMethod(['post', 'delete']);
         $customer = $this->Customers->get($id);
         if ($this->Customers->delete($customer)) {

@@ -70,6 +70,9 @@ class UsersTable extends Table
             ->requirePresence('uid', 'create')
             ->notEmptyString('uid');
 
+        $validator
+            ->boolean('isAdmin');
+
         return $validator;
     }
 

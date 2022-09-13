@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -18,6 +19,8 @@ class ProductsController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $products = $this->paginate($this->Products);
 
         $this->set(compact('products'));
@@ -30,6 +33,8 @@ class ProductsController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+
         $product = $this->Products->newEmptyEntity();
         if ($this->request->is('post')) {
             $product = $this->Products->patchEntity($product, $this->request->getData());
@@ -52,6 +57,8 @@ class ProductsController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $product = $this->Products->get($id, [
             'contain' => [],
         ]);
@@ -76,6 +83,8 @@ class ProductsController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $this->request->allowMethod(['post', 'delete']);
         $product = $this->Products->get($id);
         if ($this->Products->delete($product)) {

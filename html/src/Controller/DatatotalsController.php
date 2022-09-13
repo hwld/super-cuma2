@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Model\Table\BusinessCategoriesTable;
@@ -6,9 +7,12 @@ use App\Model\Table\CompaniesTable;
 use App\Model\Table\CustomersTable;
 use App\Model\Table\ProductsTable;
 
-class DatatotalsController extends AppController {
+class DatatotalsController extends AppController
+{
     public function customersByIndustry()
     {
+        $this->Authorization->skipAuthorization();
+
         $query = $this->getBusinessCategories()->find()
             ->leftJoinWith('Companies.Customers');
 
@@ -18,12 +22,14 @@ class DatatotalsController extends AppController {
         ])
         ->group('BusinessCategories.id')
         ->all();
-    
+
         $this->set('customersByIndustry', $customersByIndustry);
     }
 
     public function salesRankingByProduct()
     {
+        $this->Authorization->skipAuthorization();
+
         $query = $this->getProducts()->find()
             ->leftJoinWith('Sales');
 
@@ -49,9 +55,11 @@ class DatatotalsController extends AppController {
 
     public function avgCustomerUnitPrice()
     {
+        $this->Authorization->skipAuthorization();
+
         $query = $this->getCustomers()->find()
             ->leftJoinWith('Sales.Products');
-            
+
         $customerUnitPrice = $query
             ->select([
                 'name',

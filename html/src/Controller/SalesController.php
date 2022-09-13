@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -18,6 +19,8 @@ class SalesController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $this->paginate = [
             'contain' => ['Customers', 'Products'],
             'sortableFields' => [
@@ -39,6 +42,8 @@ class SalesController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+
         $sale = $this->Sales->newEmptyEntity();
         if ($this->request->is('post')) {
             $sale = $this->Sales->patchEntity($sale, $this->request->getData());
@@ -49,7 +54,7 @@ class SalesController extends AppController
             }
             $this->Flash->error(__('売上を登録できませんでした。'));
         }
-        
+
         $customers = $this->Sales->Customers->find('list')->all();
         $products = $this->Sales->Products->find('list')->all();
 
@@ -65,6 +70,8 @@ class SalesController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $sale = $this->Sales->get($id, [
             'contain' => [],
         ]);
@@ -93,6 +100,8 @@ class SalesController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $this->request->allowMethod(['post', 'delete']);
         $sale = $this->Sales->get($id);
         if ($this->Sales->delete($sale)) {
