@@ -22,13 +22,13 @@
 
             $editButton =  $canEdit ?
                 $this->Html->link(__('更新'), ['action' => 'edit', $user_data->id], [
-                    'class' => 'btn btn-sm btn-secondary'
+                    'class' => 'btn btn-sm border'
                 ]) : null;
 
             $deleteButton = $canDelete ?
                 $this->Form->postLink(__('削除'), ['action' => 'delete', $user_data->id], [
                     'confirm' => __('ユーザー {0} を削除してもよろしいですか?', $user_data->username),
-                    'class' => 'btn btn-sm btn-danger ms-1'
+                    'class' => 'btn btn-sm border ms-1'
                 ]) : null;
 
             return [

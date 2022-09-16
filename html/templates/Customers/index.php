@@ -115,18 +115,18 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
             $canDelete = $customer['permissions']['canDelete'];
 
             $viewButton = $this->Html->link(__('詳細'), ['action' => 'view', $customer_data->id], [
-                'class' => 'btn btn-sm btn-secondary'
+                'class' => 'btn btn-sm border'
             ]);
 
             $updateButton = $canEdit ?
             $this->Html->link(__('更新'), ['action' => 'edit', $customer_data->id], [
-                'class' => 'btn btn-sm btn-secondary ms-1'
+                'class' => 'btn btn-sm border ms-1'
             ]) : null;
 
             $deleteButton = $canDelete ?
             $this->Form->postLink(__('削除'), ['action' => 'delete', $customer_data->id], [
                 'confirm' => __('顧客 "{0}" を削除してもよろしいですか?', $customer_data->name),
-                'class' => 'btn btn-sm btn-danger ms-1'
+                'class' => 'btn btn-sm border ms-1'
             ]) : null;
 
             return [

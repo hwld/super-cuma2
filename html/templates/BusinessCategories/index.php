@@ -29,7 +29,7 @@
                     'action' => 'edit',
                     $businessCategory_data->id
                 ], [
-                    'class' => 'btn btn-sm btn-secondary'
+                    'class' => 'btn btn-sm border'
                 ])
                 : null;
 
@@ -38,7 +38,7 @@
                     'action' => 'delete', $businessCategory_data->id
                 ], [
                     'confirm' => __('カテゴリ "{0}" を削除してもよろしいですか？', $businessCategory_data->business_category_name),
-                    'class' => 'btn btn-sm btn-danger ms-1'
+                    'class' => 'btn btn-sm border ms-1'
                 ])
                 : null;
 

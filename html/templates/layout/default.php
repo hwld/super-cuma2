@@ -49,21 +49,21 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             text-decoration: none;
         }
 
-        table * {
-            white-space: nowrap;
+        .btn.border:hover {
+            background-color: rgb(0, 0, 0, 0.05);
         }
     </style>
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+<body class="bg-light">
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
         <div class="container-lg">
             <a class="navbar-brand" href="/customers">顧客管理システム</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="/customers">顧客</a>
@@ -87,26 +87,25 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" href="/datatotals/customers-by-industry">業種ごとの顧客数</a></li>
-                            <li><a class="dropdown-item" href="/datatotals/sales-ranking-by-product">製品別売上ランキング</a></li>
+                            <li><a class="dropdown-item" href="/datatotals/sales-ranking-by-product">製品別売上ランキング</a>
+                            </li>
                             <li><a class="dropdown-item" href="/datatotals/avg-customer-unit-price">平均客単価</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/users">ユーザー</a>
                     </li>
-                    <li>
-                        <?= $this->Form->create(null, [
+                </ul>
+                <?= $this->Form->create(null, [
                             'url' => [
                                 'controller' => 'Users',
                                 'action' => 'logout'
                             ]
                         ]) ?>
-                        <form class="d-flex" action="/users/logout" method="POST">
-                            <button class="btn btn-outline-secondary" type="submit">ログアウト</button>
-                        </form>
-                        <?= $this->Form->end() ?>
-                    </li>
-                </ul>
+                <form class="d-flex" action="/users/logout" method="POST">
+                    <button class="btn btn-outline-light" type="submit">ログアウト</button>
+                </form>
+                <?= $this->Form->end() ?>
             </div>
         </div>
     </nav>

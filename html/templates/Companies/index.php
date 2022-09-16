@@ -30,13 +30,13 @@
 
             $editBUtton = $canEdit ?
                 $this->Html->link(__('更新'), ['action' => 'edit', $company_data->id], [
-                    'class' => 'btn btn-sm btn-secondary'
+                    'class' => 'btn btn-sm border'
                 ]) : null;
 
             $deleteButton = $canDelete ?
                 $this->Form->postLink(__('削除'), ['action' => 'delete', $company_data->id], [
                     'confirm' => __('会社 ${0} を削除してもよろしいですか?', $company_data->id),
-                    'class' => 'btn btn-sm btn-danger ms-1'
+                    'class' => 'btn btn-sm border ms-1'
                 ]) : null;
 
             return [
