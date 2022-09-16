@@ -21,9 +21,24 @@ class ProductsController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $products = $this->paginate($this->Products);
+        $products_data = $this->paginate($this->Products);
+        $products = $products_data->map(function ($product) {
+            return [
+                'data' => $product,
+                'permissions' => [
+                    'canEdit' => $this->Authorization->can($product, 'edit'),
+                    'canDelete' => $this->Authorization->can($product, 'delete')
+                ]
+            ];
+        });
 
-        $this->set(compact('products'));
+        $emptyProduct = $this->Products->newEmptyEntity();
+        $canAdd = $this->Authorization->can($emptyProduct, 'add');
+
+        $this->set([
+            'products' => $products,
+            'canAdd' => $canAdd,
+        ]);
     }
 
     /**
@@ -33,9 +48,9 @@ class ProductsController extends AppController
      */
     public function add()
     {
-        $this->Authorization->skipAuthorization();
-
         $product = $this->Products->newEmptyEntity();
+        $this->Authorization->authorize($product);
+
         if ($this->request->is('post')) {
             $product = $this->Products->patchEntity($product, $this->request->getData());
             if ($this->Products->save($product)) {
@@ -57,11 +72,11 @@ class ProductsController extends AppController
      */
     public function edit($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $product = $this->Products->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($product);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $product = $this->Products->patchEntity($product, $this->request->getData());
             if ($this->Products->save($product)) {
@@ -83,10 +98,11 @@ class ProductsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $this->request->allowMethod(['post', 'delete']);
+
         $product = $this->Products->get($id);
+        $this->Authorization->authorize($product);
+
         if ($this->Products->delete($product)) {
             $this->Flash->success(__('製品を削除しました。'));
         } else {

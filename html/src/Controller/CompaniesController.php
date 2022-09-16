@@ -29,9 +29,24 @@ class CompaniesController extends AppController
                 'BusinessCategories.business_category_name',
             ]
         ];
-        $companies = $this->paginate($this->Companies);
+        $companies_data = $this->paginate($this->Companies);
+        $companies = $companies_data->map(function ($company) {
+            return [
+                'data' => $company,
+                'permissions' => [
+                    'canEdit' => $this->Authorization->can($company, 'edit'),
+                    'canDelete' => $this->Authorization->can($company, 'delete')
+                ]
+            ];
+        });
 
-        $this->set(compact('companies'));
+        $emptyCompany = $this->Companies->newEmptyEntity();
+        $canAdd = $this->Authorization->can($emptyCompany, 'add');
+
+        $this->set([
+            'companies' => $companies,
+            'canAdd' => $canAdd,
+        ]);
     }
 
     /**
@@ -41,9 +56,9 @@ class CompaniesController extends AppController
      */
     public function add()
     {
-        $this->Authorization->skipAuthorization();
-
         $company = $this->Companies->newEmptyEntity();
+        $this->Authorization->authorize($company);
+
         if ($this->request->is('post')) {
             $company = $this->Companies->patchEntity($company, $this->request->getData());
             if ($this->Companies->save($company)) {
@@ -68,11 +83,11 @@ class CompaniesController extends AppController
      */
     public function edit($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $company = $this->Companies->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($company);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $company = $this->Companies->patchEntity($company, $this->request->getData());
             if ($this->Companies->save($company)) {
@@ -97,10 +112,11 @@ class CompaniesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $this->request->allowMethod(['post', 'delete']);
+
         $company = $this->Companies->get($id);
+        $this->Authorization->authorize($company);
+
         if ($this->Companies->delete($company)) {
             $this->Flash->success(__('会社を削除しました。'));
         } else {

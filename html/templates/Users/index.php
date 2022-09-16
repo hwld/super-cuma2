@@ -15,17 +15,28 @@
             $this->Paginator->sort('email', 'メールアドレス'),
             '操作'
         ],
-        'rowCells' => $users->map(fn ($user) =>[
-            h($user->username),
-            h($user->email),
-            $this->Html->link(__('更新'), ['action' => 'edit', $user->id], [
-                'class' => 'btn btn-sm btn-secondary'
-            ]).
-             $this->Form->postLink(__('削除'), ['action' => 'delete', $user->id], [
-                'confirm' => __('ユーザー {0} を削除してもよろしいですか?', $user->username),
-                'class' => 'btn btn-sm btn-danger ms-1'
-            ])
-        ])->toArray(),
+        'rowCells' => $users->map(function ($user) {
+            $user_data = $user['data'];
+            $canEdit = $user['permissions']['canEdit'];
+            $canDelete = $user['permissions']['canDelete'];
+
+            $editButton =  $canEdit ?
+                $this->Html->link(__('更新'), ['action' => 'edit', $user_data->id], [
+                    'class' => 'btn btn-sm btn-secondary'
+                ]) : null;
+
+            $deleteButton = $canDelete ?
+                $this->Form->postLink(__('削除'), ['action' => 'delete', $user_data->id], [
+                    'confirm' => __('ユーザー {0} を削除してもよろしいですか?', $user_data->username),
+                    'class' => 'btn btn-sm btn-danger ms-1'
+                ]) : null;
+
+            return [
+                h($user_data->username),
+                h($user_data->email),
+                $editButton . $deleteButton
+            ];
+        })->toArray(),
     ]) ?>
     <?= $this->element('paginator') ?>
 </div>

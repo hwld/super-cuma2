@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \Cake\Collection\CollectionInterface $customers
  * @var Cake\Collection\CollectionInterface $prefectures
+ * @var boolean $canAdd
  */
 
 use App\Templator\FormTemplator;
@@ -92,11 +93,13 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
     </div>
 
     <div class="text-end mt-3">
+        <?php if ($canAdd): ?>
         <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary px-3 py-1']) ?>
+        <?php endif;?>
     </div>
 
     <div class="mt-2"></div>
-    <?= $this->element('table',[
+    <?= $this->element('table', [
         'headers' => [
             $this->Paginator->sort('customer_cd', '顧客コード'),
             $this->Paginator->sort('name', '名前'),
@@ -106,28 +109,40 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
             $this->Paginator->sort('email', 'E-mail'),
             '操作'
         ],
-        'rowCells' => $customers->map(fn($customer) => [
-            h($customer->customer_cd),
-            h($customer->name),
-            match ($customer->gender){
-                1 => '男性',
-                2 => '女性',
-                default => 'その他'
-            },
-            $customer->has('company') ? h($customer->company->company_name) : '不明',
-            $customer->has('prefecture') ? h($customer->prefecture->pref_name) : '不明',
-            h($customer->email),
-            $this->Html->link(__('詳細'), ['action' => 'view', $customer->id], [
+        'rowCells' => $customers->map(function ($customer) {
+            $customer_data = $customer['data'];
+            $canEdit = $customer['permissions']['canEdit'];
+            $canDelete = $customer['permissions']['canDelete'];
+
+            $viewButton = $this->Html->link(__('詳細'), ['action' => 'view', $customer_data->id], [
                 'class' => 'btn btn-sm btn-secondary'
-            ]).' '.
-            $this->Html->link(__('更新'), ['action' => 'edit', $customer->id], [
-                'class' => 'btn btn-sm btn-secondary'
-            ]).
-            $this->Form->postLink(__('削除'), ['action' => 'delete', $customer->id], [
-                'confirm' => __('顧客 "{0}" を削除してもよろしいですか?', $customer->name),
+            ]);
+
+            $updateButton = $canEdit ?
+            $this->Html->link(__('更新'), ['action' => 'edit', $customer_data->id], [
+                'class' => 'btn btn-sm btn-secondary ms-1'
+            ]) : null;
+
+            $deleteButton = $canDelete ?
+            $this->Form->postLink(__('削除'), ['action' => 'delete', $customer_data->id], [
+                'confirm' => __('顧客 "{0}" を削除してもよろしいですか?', $customer_data->name),
                 'class' => 'btn btn-sm btn-danger ms-1'
-            ])
-        ])->toArray(),
+            ]) : null;
+
+            return [
+                h($customer_data->customer_cd),
+                h($customer_data->name),
+                match ($customer_data->gender) {
+                    1 => '男性',
+                    2 => '女性',
+                    default => 'その他'
+                },
+                $customer_data->has('company') ? h($customer_data->company->company_name) : '不明',
+                $customer_data->has('prefecture') ? h($customer_data->prefecture->pref_name) : '不明',
+                h($customer_data->email),
+                $viewButton.$updateButton.$deleteButton
+            ];
+        })->toArray(),
     ]) ?>
     <?= $this->element('paginator') ?>
 </div>

@@ -30,9 +30,24 @@ class SalesController extends AppController
                 'amount',
             ],
         ];
-        $sales = $this->paginate($this->Sales);
+        $sales_data = $this->paginate($this->Sales);
+        $sales = $sales_data->map(function ($sale) {
+            return [
+                'data' => $sale,
+                'permissions' => [
+                    'canEdit' => $this->Authorization->can($sale, 'edit'),
+                    'canDelete' => $this->Authorization->can($sale, 'delete')
+                ]
+            ];
+        });
 
-        $this->set(compact('sales'));
+        $emptySale = $this->Sales->newEmptyEntity();
+        $canAdd = $this->Authorization->can($emptySale, 'add');
+
+        $this->set([
+            'sales' => $sales,
+            'canAdd' => $canAdd,
+        ]);
     }
 
     /**
@@ -42,9 +57,9 @@ class SalesController extends AppController
      */
     public function add()
     {
-        $this->Authorization->skipAuthorization();
-
         $sale = $this->Sales->newEmptyEntity();
+        $this->Authorization->authorize($sale);
+
         if ($this->request->is('post')) {
             $sale = $this->Sales->patchEntity($sale, $this->request->getData());
             if ($this->Sales->save($sale)) {
@@ -70,11 +85,11 @@ class SalesController extends AppController
      */
     public function edit($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $sale = $this->Sales->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($sale);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $sale = $this->Sales->patchEntity($sale, $this->request->getData());
             if ($this->Sales->save($sale)) {
@@ -100,10 +115,11 @@ class SalesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $this->request->allowMethod(['post', 'delete']);
+
         $sale = $this->Sales->get($id);
+        $this->Authorization->authorize($sale);
+
         if ($this->Sales->delete($sale)) {
             $this->Flash->success(__('売上を削除しました。'));
         } else {

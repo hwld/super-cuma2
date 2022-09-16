@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use function PHPSTORM_META\map;
+
 /**
  * BusinessCategories Controller
  *
@@ -21,9 +23,23 @@ class BusinessCategoriesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $businessCategories = $this->paginate($this->BusinessCategories, ['limit' => 10]);
+        $businessCategories_data = $this->paginate($this->BusinessCategories, ['limit' => 10]);
+        $businessCategories = $businessCategories_data->map(function ($category) {
+            return [
+                'data' => $category,
+                'permissions' => [
+                    'canEdit' => $this->Authorization->can($category, 'edit'),
+                    'canDelete' => $this->Authorization->can($category, 'delete')
+                ]
+            ];
+        });
 
-        $this->set(compact('businessCategories'));
+        $canAdd = $this->Authorization->can($this->BusinessCategories->newEmptyEntity(), 'add');
+
+        $this->set([
+            'businessCategories' => $businessCategories,
+            'canAdd' => $canAdd,
+        ]);
     }
 
     /**
@@ -33,9 +49,9 @@ class BusinessCategoriesController extends AppController
      */
     public function add()
     {
-        $this->Authorization->skipAuthorization();
-
         $businessCategory = $this->BusinessCategories->newEmptyEntity();
+        $this->Authorization->authorize($businessCategory);
+
         if ($this->request->is('post')) {
             $businessCategory = $this->BusinessCategories->patchEntity($businessCategory, $this->request->getData());
             if ($this->BusinessCategories->save($businessCategory)) {
@@ -57,11 +73,11 @@ class BusinessCategoriesController extends AppController
      */
     public function edit($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $businessCategory = $this->BusinessCategories->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($businessCategory);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $businessCategory = $this->BusinessCategories->patchEntity($businessCategory, $this->request->getData());
             if ($this->BusinessCategories->save($businessCategory)) {
@@ -83,10 +99,11 @@ class BusinessCategoriesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $this->request->allowMethod(['post', 'delete']);
+
         $businessCategory = $this->BusinessCategories->get($id);
+        $this->Authorization->authorize($businessCategory);
+
         if ($this->BusinessCategories->delete($businessCategory)) {
             $this->Flash->success(__('業種を削除しました。'));
         } else {

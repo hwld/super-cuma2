@@ -87,9 +87,20 @@ class UsersController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $users = $this->paginate($this->Users);
+        $users_data = $this->paginate($this->Users);
+        $users = $users_data->map(function ($user) {
+            return [
+                'data' => $user,
+                'permissions' => [
+                    'canEdit' => $this->Authorization->can($user, 'edit'),
+                    'canDelete' => $this->Authorization->can($user, 'delete')
+                ]
+            ];
+        });
 
-        $this->set(compact('users'));
+        $this->set([
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -119,11 +130,11 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $user = $this->Users->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($user);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
@@ -146,10 +157,11 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $this->request->allowMethod(['post', 'delete']);
+
         $user = $this->Users->get($id);
+        $this->Authorization->authorize($user);
+
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('ユーザーを削除しました。'));
         } else {

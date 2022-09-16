@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Entity\Customer;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenDate;
@@ -34,12 +35,25 @@ class CustomersController extends AppController
             $customers_query = $this->searchQuery($customers_query, $this->request->getQueryParams());
         }
 
-        $customers = $this->paginate($customers_query);
+        // 顧客情報の他に、その顧客を編集できるか、削除できるかをデータとして持たせる。
+        $customers = $this->paginate($customers_query)->map(function ($customer) {
+            return [
+                'data' => $customer,
+                'permissions' => [
+                    'canEdit' => $this->Authorization->can($customer, 'edit'),
+                    'canDelete' => $this->Authorization->can($customer, 'delete')
+                ]
+            ];
+        });
         $prefectures = $this->Customers->Prefectures->find('list')->all();
+
+        $emptyCustomer = $this->Customers->newEmptyEntity();
+        $canAdd = $this->Authorization->can($emptyCustomer, 'add');
 
         $this->set([
             'customers' => $customers,
-            'prefectures' => $prefectures
+            'prefectures' => $prefectures,
+            'canAdd' => $canAdd,
         ]);
     }
 
@@ -68,9 +82,8 @@ class CustomersController extends AppController
      */
     public function add()
     {
-        $this->Authorization->skipAuthorization();
-
         $customer = $this->Customers->newEmptyEntity();
+        $this->Authorization->authorize($customer);
         if ($this->request->is('post')) {
             $customer = $this->Customers->patchEntity($customer, $this->request->getData());
             if ($this->Customers->save($customer)) {
@@ -96,11 +109,10 @@ class CustomersController extends AppController
      */
     public function edit($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $customer = $this->Customers->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($customer);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $customer = $this->Customers->patchEntity($customer, $this->request->getData());
             if ($this->Customers->save($customer)) {
@@ -126,10 +138,10 @@ class CustomersController extends AppController
      */
     public function delete($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         $this->request->allowMethod(['post', 'delete']);
+
         $customer = $this->Customers->get($id);
+        $this->Authorization->authorize($customer);
         if ($this->Customers->delete($customer)) {
             $this->Flash->success(__('顧客を削除しました。'));
         } else {
