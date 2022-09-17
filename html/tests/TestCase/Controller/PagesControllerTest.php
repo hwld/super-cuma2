@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -14,6 +15,7 @@ declare(strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App\Test\TestCase\Controller;
 
 use Cake\Core\Configure;
@@ -30,6 +32,18 @@ class PagesControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
+    private $test_user_session = [
+        'Auth' => [
+            'id' => 1,
+            'username' => 'test',
+            'email' => 'test',
+            'uid' => 'test',
+            'isAdmin' => false,
+            'created' => '2022-08-11 12:59:44',
+            'modified' => '2022-08-11 12:59:44',
+        ]
+    ];
+
     /**
      * testDisplay method
      *
@@ -37,6 +51,8 @@ class PagesControllerTest extends TestCase
      */
     public function testDisplay()
     {
+        $this->session($this->test_user_session);
+
         Configure::write('debug', true);
         $this->get('/pages/home');
         $this->assertResponseOk();
@@ -51,6 +67,8 @@ class PagesControllerTest extends TestCase
      */
     public function testMissingTemplate()
     {
+        $this->session($this->test_user_session);
+
         Configure::write('debug', false);
         $this->get('/pages/not_existing');
 
@@ -65,6 +83,8 @@ class PagesControllerTest extends TestCase
      */
     public function testMissingTemplateInDebug()
     {
+        $this->session($this->test_user_session);
+
         Configure::write('debug', true);
         $this->get('/pages/not_existing');
 
@@ -81,6 +101,8 @@ class PagesControllerTest extends TestCase
      */
     public function testDirectoryTraversalProtection()
     {
+        $this->session($this->test_user_session);
+
         $this->get('/pages/../Layout/ajax');
         $this->assertResponseCode(403);
         $this->assertResponseContains('Forbidden');
@@ -93,6 +115,8 @@ class PagesControllerTest extends TestCase
      */
     public function testCsrfAppliedError()
     {
+        $this->session($this->test_user_session);
+
         $this->post('/pages/home', ['hello' => 'world']);
 
         $this->assertResponseCode(403);
@@ -106,6 +130,8 @@ class PagesControllerTest extends TestCase
      */
     public function testCsrfAppliedOk()
     {
+        $this->session($this->test_user_session);
+
         $this->enableCsrfToken();
         $this->post('/pages/home', ['hello' => 'world']);
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
@@ -25,7 +26,6 @@ class ProductsTableTest extends TestCase
      */
     protected $fixtures = [
         'app.Products',
-        'app.Sales',
     ];
 
     /**

@@ -27,3 +27,13 @@ services:
       MYSQL_USER: super-cuma2
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
+  super-cuma2-test-db:
+    container_name: super-cuma2-test-db
+    image: mysql:8.0
+    volumes:
+      - "./db:/etc/mysql/conf.d"
+    environment:
+      MYSQL_DATABASE: test-super-cuma2
+      MYSQL_USER: test-super-cuma2
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password

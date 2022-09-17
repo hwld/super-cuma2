@@ -165,10 +165,8 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         // sessionに存在しない場合は作ったFirebaseAuthenticationクラスを呼び出す。
         $service->loadAuthenticator('Authentication.Session', [
             // この設定を使用すると、認証時に必ずidentifierを通すようになる。
-            // 今回設定しているFirebaseIdentifierはDBアクセスを行うので、パフォーマンスが悪くなるかもしれない。
-            // が、ユーザーを削除したときにそのユーザーのセッションを破棄できるというメリットはありそう？
-            'identify' => true,
-            'fields' => ['uid' => 'uid'],
+            // 'identify' => true,
+            // 'fields' => ['uid' => 'uid'],
         ]);
         $service->loadAuthenticator('Firebase');
 
