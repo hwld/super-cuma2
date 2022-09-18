@@ -39,6 +39,7 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Composer\Config;
 use PhpParser\Node\Identifier;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -150,6 +151,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $this->addPlugin('Migrations');
 
         // Load more plugins here
+        if (Configure::read('debug')) {
+            $this->addPlugin('CakephpFixtureFactories');
+        }
     }
 
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface

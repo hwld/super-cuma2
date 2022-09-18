@@ -54,7 +54,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </style>
 </head>
 
-<body>
+<body class="bg-light">
     <main class="main">
         <div class="container-lg pt-3">
             <?= $this->Flash->render() ?>

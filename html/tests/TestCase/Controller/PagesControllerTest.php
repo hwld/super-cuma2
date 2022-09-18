@@ -18,10 +18,13 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
+use App\Model\Entity\User;
+use App\Test\Factory\UserFactory;
 use Cake\Core\Configure;
 use Cake\TestSuite\Constraint\Response\StatusCode;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Composer\Config;
 
 /**
  * PagesControllerTest class
@@ -32,17 +35,29 @@ class PagesControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
-    private $test_user_session = [
-        'Auth' => [
-            'id' => 1,
-            'username' => 'test',
-            'email' => 'test',
-            'uid' => 'test',
-            'isAdmin' => false,
-            'created' => '2022-08-11 12:59:44',
-            'modified' => '2022-08-11 12:59:44',
-        ]
-    ];
+    private array $admin_user_session;
+    private array $normal_user_session;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $admin_user = UserFactory::make(['isAdmin' => true])->getEntity()->toArray();
+        $this->admin_user_session = [
+            'Auth' => $admin_user
+        ];
+    }
+
+    /**
+     * testDisplayWithoutSession method
+     *
+     * @return void
+     */
+    public function testWithoutSession()
+    {
+        $this->get('/pages/home');
+        $this->assertRedirect();
+    }
 
     /**
      * testDisplay method
@@ -51,7 +66,7 @@ class PagesControllerTest extends TestCase
      */
     public function testDisplay()
     {
-        $this->session($this->test_user_session);
+        $this->session($this->admin_user_session);
 
         Configure::write('debug', true);
         $this->get('/pages/home');
@@ -67,7 +82,7 @@ class PagesControllerTest extends TestCase
      */
     public function testMissingTemplate()
     {
-        $this->session($this->test_user_session);
+        $this->session($this->admin_user_session);
 
         Configure::write('debug', false);
         $this->get('/pages/not_existing');
@@ -83,7 +98,7 @@ class PagesControllerTest extends TestCase
      */
     public function testMissingTemplateInDebug()
     {
-        $this->session($this->test_user_session);
+        $this->session($this->admin_user_session);
 
         Configure::write('debug', true);
         $this->get('/pages/not_existing');
@@ -101,7 +116,7 @@ class PagesControllerTest extends TestCase
      */
     public function testDirectoryTraversalProtection()
     {
-        $this->session($this->test_user_session);
+        $this->session($this->admin_user_session);
 
         $this->get('/pages/../Layout/ajax');
         $this->assertResponseCode(403);
@@ -115,7 +130,7 @@ class PagesControllerTest extends TestCase
      */
     public function testCsrfAppliedError()
     {
-        $this->session($this->test_user_session);
+        $this->session($this->admin_user_session);
 
         $this->post('/pages/home', ['hello' => 'world']);
 
@@ -130,7 +145,7 @@ class PagesControllerTest extends TestCase
      */
     public function testCsrfAppliedOk()
     {
-        $this->session($this->test_user_session);
+        $this->session($this->admin_user_session);
 
         $this->enableCsrfToken();
         $this->post('/pages/home', ['hello' => 'world']);
