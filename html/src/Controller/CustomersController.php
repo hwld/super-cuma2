@@ -151,7 +151,12 @@ class CustomersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    private function searchQuery(Query $query, array $searchParams)
+    /**
+     * @param \Cake\ORM\Query $query
+     * @param array $searchParams
+     * @return \Cake\ORM\Query
+     */
+    private function searchQuery($query, $searchParams)
     {
         return $query->where(function (QueryExpression $exp, Query $q) use ($searchParams) {
             $customer_cd = $searchParams['customer_cd'] ?? '';

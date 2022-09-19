@@ -8,18 +8,27 @@ use Authorization\IdentityInterface;
 
 class BusinessCategoryPolicy
 {
-    public function canAdd(IdentityInterface $user, BusinessCategory $businessCategory)
+    public function canAdd(IdentityInterface $user, BusinessCategory $businessCategory): bool
     {
-        return $user->isAdmin;
+        if (isset($user->isAdmin)) {
+            return $user->isAdmin;
+        }
+        return false;
     }
 
-    public function canEdit(IdentityInterface $user, BusinessCategory $businessCategory)
+    public function canEdit(IdentityInterface $user, BusinessCategory $businessCategory): bool
     {
-        return $user->isAdmin;
+        if (isset($user->isAdmin)) {
+            return $user->isAdmin;
+        }
+        return false;
     }
 
-    public function canDelete(IdentityInterface $user, BusinessCategory $businessCategory)
+    public function canDelete(IdentityInterface $user, BusinessCategory $businessCategory): bool
     {
-        return $user->isAdmin;
+        if (isset($user->isAdmin)) {
+            return $user->isAdmin;
+        }
+        return false;
     }
 }

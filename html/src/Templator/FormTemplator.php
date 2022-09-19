@@ -2,8 +2,13 @@
 
 namespace App\Templator;
 
-class FormTemplator {
-    public static function getHorizontalFormTemplate() {
+class FormTemplator
+{
+    /**
+     * @return array
+     */
+    public static function getHorizontalFormTemplate()
+    {
         return  [
             // Used for button elements in button().
             'button' => '<button{{attrs}}>{{text}}</button>',
@@ -73,7 +78,11 @@ class FormTemplator {
         ];
     }
 
-    public static function getVerticalFormTemplates() {
+    /**
+     * @return array
+     */
+    public static function getVerticalFormTemplates()
+    {
         return  [
             // Used for button elements in button().
             'button' => '<button{{attrs}}>{{text}}</button>',

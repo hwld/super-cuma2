@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Firebase;
+use Cake\Collection\Collection;
+use Cake\Database\Schema\Collection as SchemaCollection;
 use Cake\Event\EventInterface;
+use Cake\ORM\TableRegistry;
 use Kreait\Firebase\Factory;
 
 /**
@@ -23,6 +26,9 @@ class UsersController extends AppController
         $this->Authentication->allowUnauthenticated(['login']);
     }
 
+    /**
+     * @return void|\Cake\Http\Response|null
+     */
     public function login()
     {
         $this->Authorization->skipAuthorization();
@@ -30,6 +36,11 @@ class UsersController extends AppController
         $this->viewBuilder()->setLayout('login');
 
         $result = $this->Authentication->getResult();
+        if (is_null($result)) {
+            $this->Flash->error('ログインに失敗しました。');
+            return;
+        }
+
         if ($result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? '/customers';
             return $this->redirect($target);
@@ -55,11 +66,16 @@ class UsersController extends AppController
                     'username' => $username,
                     'email' => $email,
                     'isAdmin' => false,
-                    'uid' => $uid
+                    'uid' => $uid,
             ], [
                 'accessibleFields' => ['isAdmin' => true],
             ]);
             $savedUser = $this->Users->save($newUser);
+
+            if (!$savedUser) {
+                $this->Flash->error('ユーザーの登録に失敗しました。');
+                return;
+            }
 
             // ユーザーをセッションに保存する
             $this->Authentication->setIdentity($savedUser);
@@ -70,6 +86,9 @@ class UsersController extends AppController
         }
     }
 
+    /**
+     * @return \Cake\Http\Response|null
+     */
     public function logout()
     {
         $this->Authorization->skipAuthorization();

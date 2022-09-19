@@ -7,18 +7,27 @@ use Authorization\IdentityInterface;
 
 class SalePolicy
 {
-    public function canAdd(IdentityInterface $user, Sale $sale)
+    public function canAdd(IdentityInterface $user, Sale $sale): bool
     {
-        return $user->isAdmin;
+        if (isset($user->isAdmin)) {
+            return $user->isAdmin;
+        }
+        return false;
     }
 
-    public function canEdit(IdentityInterface $user, Sale $sale)
+    public function canEdit(IdentityInterface $user, Sale $sale): bool
     {
-        return $user->isAdmin;
+        if (isset($user->isAdmin)) {
+            return $user->isAdmin;
+        }
+        return false;
     }
 
-    public function canDelete(IdentityInterface $user, Sale $sale)
+    public function canDelete(IdentityInterface $user, Sale $sale): bool
     {
-        return $user->isAdmin;
+        if (isset($user->isAdmin)) {
+            return $user->isAdmin;
+        }
+        return false;
     }
 }

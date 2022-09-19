@@ -2,6 +2,7 @@
 
 namespace App\Identifier;
 
+use ArrayAccess;
 use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Identifier\Resolver\ResolverAwareTrait;
 
@@ -13,6 +14,9 @@ class FirebaseIdentifier extends AbstractIdentifier
         'resolver' => 'Authentication.Orm'
     ];
 
+    /**
+     * @return \ArrayAccess<mixed,mixed>|array|null
+     */
     public function identify(array $credentials)
     {
         if (!isset($credentials['uid'])) {

@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Model\Table\BusinessCategoriesTable;
-use App\Model\Table\CompaniesTable;
 use App\Model\Table\CustomersTable;
 use App\Model\Table\ProductsTable;
+use TypeError;
 
 class DatatotalsController extends AppController
 {
+    /**
+     * @return void
+     */
     public function customersByIndustry()
     {
         $this->Authorization->skipAuthorization();
@@ -26,6 +29,9 @@ class DatatotalsController extends AppController
         $this->set('customersByIndustry', $customersByIndustry);
     }
 
+    /**
+     * @return void
+     */
     public function salesRankingByProduct()
     {
         $this->Authorization->skipAuthorization();
@@ -53,6 +59,9 @@ class DatatotalsController extends AppController
         $this->set('ranking', $ranking);
     }
 
+    /**
+     * @return void
+     */
     public function avgCustomerUnitPrice()
     {
         $this->Authorization->skipAuthorization();
@@ -76,16 +85,28 @@ class DatatotalsController extends AppController
 
     private function getBusinessCategories(): BusinessCategoriesTable
     {
-        return $this->getTableLocator()->get('BusinessCategories');
+        $table =  $this->getTableLocator()->get('BusinessCategories');
+        if ($table instanceof BusinessCategoriesTable) {
+            return $table;
+        }
+        throw new TypeError();
     }
 
     private function getProducts(): ProductsTable
     {
-        return $this->getTableLocator()->get('Products');
+        $table = $this->getTableLocator()->get('Products');
+        if ($table instanceof ProductsTable) {
+            return $table;
+        }
+        throw new TypeError();
     }
 
     private function getCustomers(): CustomersTable
     {
-        return $this->getTableLocator()->get('Customers');
+        $table =  $this->getTableLocator()->get('Customers');
+        if ($table instanceof CustomersTable) {
+            return $table;
+        }
+        throw new TypeError();
     }
 }

@@ -14,6 +14,7 @@ use Cake\ORM\Entity;
  * @property string $username
  * @property string $email
  * @property string $uid
+ * @property string $isAdmin
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  */

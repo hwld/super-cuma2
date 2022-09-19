@@ -10,13 +10,12 @@ use Authentication\Authenticator\ResultInterface;
 use Authentication\Authenticator\Result;
 use Authentication\Identifier\IdentifierInterface;
 use Exception;
-use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
-use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Contract\Auth;
 
 class FirebaseAuthenticator extends AbstractAuthenticator
 {
-    private $auth;
+    private Auth $auth;
 
     public function __construct(IdentifierInterface $identifier, array $config)
     {
@@ -29,10 +28,13 @@ class FirebaseAuthenticator extends AbstractAuthenticator
     {
         // 送信されたformDataからidTokenを取得する。
         $body = $request->getParsedBody();
-        if (!isset($body['idToken'])) {
-            return new Result(null, Result::FAILURE_CREDENTIALS_MISSING);
+        $idToken = null;
+        if (is_array($body)) {
+            if (!isset($body['idToken'])) {
+                return new Result(null, Result::FAILURE_CREDENTIALS_MISSING);
+            }
+            $idToken = $body['idToken'];
         }
-        $idToken = $body['idToken'];
 
         try {
             $verifiedIdToken = $this->auth->verifyIdToken($idToken);
