@@ -1,11 +1,14 @@
 <?php
 /**
- * @var \App\View\AppView $this
- * @var \Cake\Collection\CollectionInterface $customers
+ * @var App\View\AppView $this
+ * @var Cake\Collection\CollectionInterface $customers
+ * @var array<Operable<Customer>> $customers
  * @var Cake\Collection\CollectionInterface $prefectures
  * @var boolean $canAdd
  */
 
+use App\Model\Entity\Customer;
+use App\ViewData\Operable;
 use App\Templator\FormTemplator;
 
 $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
@@ -109,40 +112,44 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
             $this->Paginator->sort('email', 'E-mail'),
             '操作'
         ],
-        'rowCells' => $customers->map(function ($customer) {
-            $customer_data = $customer['data'];
-            $canEdit = $customer['permissions']['canEdit'];
-            $canDelete = $customer['permissions']['canDelete'];
+        'rowCells' => array_map(function ($operable) {
+            $customer = $operable->data;
+            // vscode-intelephenseがtemplateをサポートしていないのでmixideになってしまう。
+            // https://github.com/bmewburn/vscode-intelephense/issues/1144
+            assert($customer instanceof Customer);
 
-            $viewButton = $this->Html->link(__('詳細'), ['action' => 'view', $customer_data->id], [
+            $canEdit = $operable->canEdit;
+            $canDelete = $operable->canDelete;
+
+            $viewButton = $this->Html->link(__('詳細'), ['action' => 'view', $customer->id], [
                 'class' => 'btn btn-sm border'
             ]);
 
             $updateButton = $canEdit ?
-            $this->Html->link(__('更新'), ['action' => 'edit', $customer_data->id], [
+            $this->Html->link(__('更新'), ['action' => 'edit', $customer->id], [
                 'class' => 'btn btn-sm border ms-1'
             ]) : null;
 
             $deleteButton = $canDelete ?
-            $this->Form->postLink(__('削除'), ['action' => 'delete', $customer_data->id], [
-                'confirm' => __('顧客 "{0}" を削除してもよろしいですか?', $customer_data->name),
+            $this->Form->postLink(__('削除'), ['action' => 'delete', $customer->id], [
+                'confirm' => __('顧客 "{0}" を削除してもよろしいですか?', $customer->name),
                 'class' => 'btn btn-sm border ms-1'
             ]) : null;
 
             return [
-                h($customer_data->customer_cd),
-                h($customer_data->name),
-                match ($customer_data->gender) {
+                h($customer->customer_cd),
+                h($customer->name),
+                match ($customer->gender) {
                     1 => '男性',
                     2 => '女性',
                     default => 'その他'
                 },
-                $customer_data->has('company') ? h($customer_data->company->company_name) : '不明',
-                $customer_data->has('prefecture') ? h($customer_data->prefecture->pref_name) : '不明',
-                h($customer_data->email),
+                $customer->has('company') ? h($customer->company->company_name) : '不明',
+                $customer->has('prefecture') ? h($customer->prefecture->pref_name) : '不明',
+                h($customer->email),
                 $viewButton.$updateButton.$deleteButton
             ];
-        })->toArray(),
+        }, $customers)
     ]) ?>
     <?= $this->element('paginator') ?>
 </div>

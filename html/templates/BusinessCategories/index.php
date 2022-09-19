@@ -1,9 +1,13 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Collection\CollectionInterface $businessCategories
+ * @var array<Operable<BusinessCategory>> $businessCategories
  * @var boolean $canAdd
  */
+
+use App\ViewData\Operable;
+use App\Model\Entity\BusinessCategory;
+
 ?>
 <div>
     <h3><?= __('業種一覧') ?>
@@ -19,15 +23,17 @@
             $this->Paginator->sort('business_category_name', '業種'),
             '操作'
         ],
-        'rowCells' => $businessCategories->map(function ($businessCategory) {
-            $businessCategory_data = $businessCategory['data'];
-            $canEdit = $businessCategory['permissions']['canEdit'];
-            $canDelete = $businessCategory['permissions']['canDelete'];
+        'rowCells' => array_map(function ($operable) {
+            $businessCategory = $operable->data;
+            assert($businessCategory instanceof BusinessCategory);
+
+            $canEdit = $operable->canEdit;
+            $canDelete = $operable->canDelete;
 
             $editButton = $canEdit ?
                 $this->Html->link(__('更新'), [
                     'action' => 'edit',
-                    $businessCategory_data->id
+                    $businessCategory->id
                 ], [
                     'class' => 'btn btn-sm border'
                 ])
@@ -35,18 +41,18 @@
 
             $deleteButton = $canDelete ?
                 $this->Form->postLink(__('削除'), [
-                    'action' => 'delete', $businessCategory_data->id
+                    'action' => 'delete', $businessCategory->id
                 ], [
-                    'confirm' => __('カテゴリ "{0}" を削除してもよろしいですか？', $businessCategory_data->business_category_name),
+                    'confirm' => __('カテゴリ "{0}" を削除してもよろしいですか？', $businessCategory->business_category_name),
                     'class' => 'btn btn-sm border ms-1'
                 ])
                 : null;
 
             return [
-                h($businessCategory_data->business_category_name),
+                h($businessCategory->business_category_name),
                 $editButton.$deleteButton
             ];
-        })->toArray(),
+        }, $businessCategories)
     ])?>
     <?= $this->element('paginator') ?>
 </div>

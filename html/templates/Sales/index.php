@@ -4,6 +4,9 @@
  * @var \Cake\Collection\CollectionInterface $sales
  * @var boolean $canAdd
  */
+
+use App\Model\Entity\Sale;
+
 ?>
 <div>
     <h3><?= __('売上一覧') ?>
@@ -26,6 +29,7 @@
         ],
         'rowCells' => $sales->map(function ($sale) {
             $sale_data = $sale['data'];
+            assert($sale_data instanceof Sale);
             $canEdit = $sale['permissions']['canEdit'];
             $canDelete = $sale['permissions']['canDelete'];
 

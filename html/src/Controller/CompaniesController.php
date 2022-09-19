@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Entity\Company;
+use App\ViewData\Operable;
+
 /**
  * Companies Controller
  *
@@ -29,16 +32,13 @@ class CompaniesController extends AppController
                 'BusinessCategories.business_category_name',
             ]
         ];
-        $companies_data = $this->paginate($this->Companies);
-        $companies = $companies_data->map(function ($company) {
-            return [
-                'data' => $company,
-                'permissions' => [
-                    'canEdit' => $this->Authorization->can($company, 'edit'),
-                    'canDelete' => $this->Authorization->can($company, 'delete')
-                ]
-            ];
-        });
+        $companies_array = $this->paginate($this->Companies)->toArray();
+        $companies = array_map(function (Company $company) {
+            $canEdit = $this->Authorization->can($company, 'edit');
+            $canDelete = $this->Authorization->can($company, 'delete');
+
+            return new Operable($company, $canEdit, $canDelete);
+        }, $companies_array);
 
         $emptyCompany = $this->Companies->newEmptyEntity();
         $canAdd = $this->Authorization->can($emptyCompany, 'add');

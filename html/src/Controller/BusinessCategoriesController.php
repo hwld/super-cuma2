@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Entity\BusinessCategory;
+use App\ViewData\Operable;
+
 /**
  * BusinessCategories Controller
  *
@@ -21,16 +24,13 @@ class BusinessCategoriesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $businessCategories_data = $this->paginate($this->BusinessCategories, ['limit' => 10]);
-        $businessCategories = $businessCategories_data->map(function ($category) {
-            return [
-                'data' => $category,
-                'permissions' => [
-                    'canEdit' => $this->Authorization->can($category, 'edit'),
-                    'canDelete' => $this->Authorization->can($category, 'delete')
-                ]
-            ];
-        });
+        $businessCategories_array = $this->paginate($this->BusinessCategories, ['limit' => 10])->toArray();
+        $businessCategories = array_map(function (BusinessCategory $category) {
+            $canEdit = $this->Authorization->can($category, 'edit');
+            $canDelete = $this->Authorization->can($category, 'delete');
+
+            return new Operable($category, $canEdit, $canDelete);
+        }, $businessCategories_array);
 
         $canAdd = $this->Authorization->can($this->BusinessCategories->newEmptyEntity(), 'add');
 

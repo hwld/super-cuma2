@@ -86,27 +86,21 @@ class DatatotalsController extends AppController
     private function getBusinessCategories(): BusinessCategoriesTable
     {
         $table =  $this->getTableLocator()->get('BusinessCategories');
-        if ($table instanceof BusinessCategoriesTable) {
-            return $table;
-        }
-        throw new TypeError();
+        assert($table instanceof BusinessCategoriesTable);
+        return $table;
     }
 
     private function getProducts(): ProductsTable
     {
         $table = $this->getTableLocator()->get('Products');
-        if ($table instanceof ProductsTable) {
-            return $table;
-        }
-        throw new TypeError();
+        assert($table instanceof ProductsTable);
+        return $table;
     }
 
     private function getCustomers(): CustomersTable
     {
         $table =  $this->getTableLocator()->get('Customers');
-        if ($table instanceof CustomersTable) {
-            return $table;
-        }
-        throw new TypeError();
+        assert($table instanceof CustomersTable);
+        return $table;
     }
 }

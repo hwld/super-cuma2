@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Entity\Product;
+use App\ViewData\Operable;
+
 /**
  * Products Controller
  *
@@ -21,16 +24,13 @@ class ProductsController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $products_data = $this->paginate($this->Products);
-        $products = $products_data->map(function ($product) {
-            return [
-                'data' => $product,
-                'permissions' => [
-                    'canEdit' => $this->Authorization->can($product, 'edit'),
-                    'canDelete' => $this->Authorization->can($product, 'delete')
-                ]
-            ];
-        });
+        $products_array = $this->paginate($this->Products)->toArray();
+        $products = array_map(function (Product $product) {
+            $canEdit = $this->Authorization->can($product, 'edit');
+            $canDelete = $this->Authorization->can($product, 'delete');
+
+            return new Operable($product, $canEdit, $canDelete);
+        }, $products_array);
 
         $emptyProduct = $this->Products->newEmptyEntity();
         $canAdd = $this->Authorization->can($emptyProduct, 'add');

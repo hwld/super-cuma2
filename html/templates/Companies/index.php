@@ -1,9 +1,13 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Collection\CollectionInterface $companies
+ * @var array<Operable<Company>> $companies
  * @var boolean $canAdd
  */
+
+use App\ViewData\Operable;
+use App\Model\Entity\Company;
+
 ?>
 <div>
     <h3><?= __('会社一覧') ?>
@@ -23,29 +27,30 @@
             $this->Paginator->sort('company_kana', '会社名(カナ)'),
             '操作'
         ],
-        'rowCells' => $companies->map(function ($company) {
-            $company_data = $company['data'];
-            $canEdit = $company['permissions']['canEdit'];
-            $canDelete = $company['permissions']['canDelete'];
+        'rowCells' => array_map(function (Operable $operable) {
+            $company = $operable->data;
+            assert($company instanceof Company);
+            $canEdit = $operable->canEdit;
+            $canDelete = $operable->canDelete;
 
             $editBUtton = $canEdit ?
-                $this->Html->link(__('更新'), ['action' => 'edit', $company_data->id], [
+                $this->Html->link(__('更新'), ['action' => 'edit', $company->id], [
                     'class' => 'btn btn-sm border'
                 ]) : null;
 
             $deleteButton = $canDelete ?
-                $this->Form->postLink(__('削除'), ['action' => 'delete', $company_data->id], [
-                    'confirm' => __('会社 ${0} を削除してもよろしいですか?', $company_data->id),
+                $this->Form->postLink(__('削除'), ['action' => 'delete', $company->id], [
+                    'confirm' => __('会社 ${0} を削除してもよろしいですか?', $company->id),
                     'class' => 'btn btn-sm border ms-1'
                 ]) : null;
 
             return [
-                $company_data->has('business_category') ? h($company_data->business_category->business_category_name) : '不明',
-                h($company_data->company_name),
-                h($company_data->company_kana),
+                $company->has('business_category') ? h($company->business_category->business_category_name) : '不明',
+                h($company->company_name),
+                h($company->company_kana),
                 $editBUtton.$deleteButton
             ];
-        })->toArray(),
+        }, $companies)
     ]) ?>
     <?= $this->element('paginator') ?>
 </div>

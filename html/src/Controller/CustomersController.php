@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Entity\Customer;
+use Cake\Core\App;
 use Cake\Database\Expression\QueryExpression;
-use Cake\Event\EventInterface;
 use Cake\I18n\FrozenDate;
 use Cake\ORM\Query;
+use App\ViewData\Operable;
 
 /**
  * Customers Controller
@@ -36,15 +37,14 @@ class CustomersController extends AppController
         }
 
         // 顧客情報の他に、その顧客を編集できるか、削除できるかをデータとして持たせる。
-        $customers = $this->paginate($customers_query)->map(function ($customer) {
-            return [
-                'data' => $customer,
-                'permissions' => [
-                    'canEdit' => $this->Authorization->can($customer, 'edit'),
-                    'canDelete' => $this->Authorization->can($customer, 'delete')
-                ]
-            ];
-        });
+        $customers_array = $this->paginate($customers_query)->toArray();
+        $customers = array_map(function (Customer $customer) {
+            $canEdit = $this->Authorization->can($customer, 'edit');
+            $canDelete = $this->Authorization->can($customer, 'delete');
+
+            return new Operable($customer, $canEdit, $canDelete);
+        }, $customers_array);
+
         $prefectures = $this->Customers->Prefectures->find('list')->all();
 
         $emptyCustomer = $this->Customers->newEmptyEntity();
