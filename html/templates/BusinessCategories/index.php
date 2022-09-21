@@ -19,6 +19,7 @@ use App\Model\Entity\BusinessCategory;
     </div>
     <div class="mt-2"></div>
     <?= $this->element('table', [
+        'noDataText' => '業種が存在しません。<br>右上の追加ボタンから業種を追加してください。</br>',
         'headers' => [
             $this->Paginator->sort('business_category_name', '業種'),
             '操作'

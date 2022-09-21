@@ -31,9 +31,10 @@ class CustomersController extends AppController
         $customers_query = $this->Customers->find()->contain(['Companies', 'Prefectures']);
 
         // 検索時の処理
-        $action = $this->request->getQuery('action');
-        if ($action == 'search') {
+        $searched = false;
+        if ($this->request->getQuery('action') == 'search') {
             $customers_query = $this->searchQuery($customers_query, $this->request->getQueryParams());
+            $searched = true;
         }
 
         // 顧客情報の他に、その顧客を編集できるか、削除できるかをデータとして持たせる。
@@ -54,6 +55,7 @@ class CustomersController extends AppController
             'customers' => $customers,
             'prefectures' => $prefectures,
             'canAdd' => $canAdd,
+            'searched' => $searched,
         ]);
     }
 
@@ -158,7 +160,7 @@ class CustomersController extends AppController
      */
     private function searchQuery($query, $searchParams)
     {
-        return $query->where(function (QueryExpression $exp, Query $q) use ($searchParams) {
+        return $query->where(function (QueryExpression $exp) use ($searchParams) {
             $customer_cd = $searchParams['customer_cd'] ?? '';
             $customer_name = $searchParams['name'] ?? '';
             $customer_kana = $searchParams['kana'] ?? '';
@@ -169,18 +171,19 @@ class CustomersController extends AppController
             $lasttrade_start_text = $searchParams['lasttrade_start'] ?? '';
             $lasttrade_end_text = $searchParams['lasttrade_end'] ?? '';
 
-            $exp = $exp->like('customer_cd', '%'.$customer_cd.'%')
+            $newExp = $exp
+                ->like('customer_cd', '%'.$customer_cd.'%')
                 ->like('name', '%'.$customer_name.'%')
                 ->like('kana', '%'.$customer_kana.'%')
                 ->like('phone', '%'.$phone.'%')
                 ->like('email', '%'.$email.'%');
 
             if ($company_name != '') {
-                $exp  = $exp->like('Companies.company_name', '%'.$company_name.'%');
+                $newExp  = $newExp->like('Companies.company_name', '%'.$company_name.'%');
             }
 
             if ($pref_id != '') {
-                $exp = $exp->eq('Prefectures.id', $pref_id);
+                $newExp = $newExp->eq('Prefectures.id', $pref_id);
             }
 
             // 最終取引日の開始日か終了日どちらか一方でも入力されていれば
@@ -194,10 +197,10 @@ class CustomersController extends AppController
                     false => FrozenDate::now()->addYear(100)
                 };
 
-                $exp = $exp->between('lasttrade', $lasttrade_start, $lasttrade_end);
+                $newExp = $newExp->between('lasttrade', $lasttrade_start, $lasttrade_end);
             }
 
-            return $exp;
+            return $newExp;
         });
     }
 }

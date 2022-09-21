@@ -3,6 +3,7 @@
  * @var App\View\AppView $this
  * @var array $headers
  * @var array[] $rowCells
+ * @var string|null $noDataText
  */
 ?>
 <?php $this->start('css'); ?>
@@ -33,7 +34,15 @@
             <?= $this->Html->tableHeaders($headers) ?>
         </thead>
         <tbody>
+            <?php if (empty($rowCells)): ?>
+            <tr style="height: 200px;">
+                <td colspan="<?= count($headers) ?>"
+                    class="text-center align-middle text-secondary"><?= $noDataText ?? 'データがありません。' ?>
+                </td>
+            </tr>
+            <?php else: ?>
             <?= $this->Html->tableCells($rowCells) ?>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>

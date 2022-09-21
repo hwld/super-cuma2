@@ -20,6 +20,7 @@ use App\Model\Entity\Sale;
     </div>
     <div class="mt-2"></div>
     <?= $this->element('table', [
+        'noDataText' => '売上が存在しません。<br>右上の追加ボタンから売上を登録してください。</br>',
         'headers' => [
             $this->Paginator->sort('purchase_date', '購入日'),
             $this->Paginator->sort('Customers.name', '顧客名'),

@@ -19,6 +19,7 @@ use App\ViewData\Operable;
     </div>
     <div class="mt-2"></div>
     <?= $this->element('table', [
+            'noDataText' => '製品が存在しません。<br>右上の追加ボタンから製品を追加してください。</br>',
             'headers' => [
                 $this->Paginator->sort('product_name', '製品名'),
                 $this->Paginator->sort('unit_price', '単価'),

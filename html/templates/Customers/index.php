@@ -5,6 +5,7 @@
  * @var array<Operable<Customer>> $customers
  * @var Cake\Collection\CollectionInterface $prefectures
  * @var boolean $canAdd
+ * @var boolean $searched
  */
 
 use App\Model\Entity\Customer;
@@ -12,6 +13,7 @@ use App\ViewData\Operable;
 use App\Templator\FormTemplator;
 
 $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
+
 ?>
 <div>
     <h3><?= __('顧客一覧') ?>
@@ -103,6 +105,9 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
 
     <div class="mt-2"></div>
     <?= $this->element('table', [
+        'noDataText' => $searched
+            ? '検索条件に一致する顧客はいません。<br>別の条件をお試しください。</br>'
+            : '顧客がまだ登録されていません。<br>右上の追加ボタンから顧客を追加してください。</br>',
         'headers' => [
             $this->Paginator->sort('customer_cd', '顧客コード'),
             $this->Paginator->sort('name', '名前'),

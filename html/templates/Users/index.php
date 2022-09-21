@@ -10,6 +10,7 @@
     </h3>
     <div class="mt-4"></div>
     <?= $this->element('table', [
+        'noDataText' => 'ユーザーが存在しません。',
         'headers' => [
             $this->Paginator->sort('username', 'ユーザー名'),
             $this->Paginator->sort('email', 'メールアドレス'),

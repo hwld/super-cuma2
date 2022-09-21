@@ -21,6 +21,7 @@ use App\Model\Entity\Company;
     </div>
     <div class="mt-2"></div>
     <?= $this->element('table', [
+        'noDataText' => '会社が存在しません。<br>右上の追加ボタンから会社を追加してください。</br>',
         'headers' => [
             $this->Paginator->sort('BusinessCategories.business_category_name', '業種'),
             $this->Paginator->sort('company_name', '会社名'),
