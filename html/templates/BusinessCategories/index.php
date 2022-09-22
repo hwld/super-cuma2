@@ -28,24 +28,20 @@ use App\Model\Entity\BusinessCategory;
             $businessCategory = $operable->data;
             assert($businessCategory instanceof BusinessCategory);
 
-            $canEdit = $operable->canEdit;
-            $canDelete = $operable->canDelete;
+            $editButton = $operable->canEdit ?
+                $this->element('tableActionLink', [
+                    'text' => '更新',
+                    'url' => ['action' => 'edit', $businessCategory->id],
+                    'type' => 'edit',
+                ]) : null;
 
-            $editButton = $canEdit ?
-                $this->Html->link(__('更新'), [
-                    'action' => 'edit',
-                    $businessCategory->id
-                ], [
-                    'class' => 'btn btn-sm border'
-                ])
-                : null;
-
-            $deleteButton = $canDelete ?
-                $this->Form->postLink(__('削除'), [
-                    'action' => 'delete', $businessCategory->id
-                ], [
-                    'confirm' => __('カテゴリ "{0}" を削除してもよろしいですか？', $businessCategory->business_category_name),
-                    'class' => 'btn btn-sm border ms-1'
+            $deleteButton = $operable->canDelete ?
+                $this->element('tableActionPostLink', [
+                    'text' => '削除',
+                    'confirm' => "カテゴリ {$businessCategory->business_category_name} を削除してもよろしいですか？",
+                    'url' => ['action' => 'delete', $businessCategory->id],
+                    'type' => 'delete',
+                    'class' => 'ms-1'
                 ])
                 : null;
 

@@ -3,6 +3,9 @@
  * @var \App\View\AppView $this
  * @var \Cake\Collection\CollectionInterface $users
  */
+
+use App\Model\Entity\User;
+
 ?>
 <div>
 
@@ -18,24 +21,31 @@
         ],
         'rowCells' => $users->map(function ($user) {
             $user_data = $user['data'];
+            assert($user_data instanceof User);
             $canEdit = $user['permissions']['canEdit'];
             $canDelete = $user['permissions']['canDelete'];
 
-            $editButton =  $canEdit ?
-                $this->Html->link(__('更新'), ['action' => 'edit', $user_data->id], [
-                    'class' => 'btn btn-sm border'
+            $updateButton = $canEdit ?
+                $this->element('tableActionLink', [
+                    'text' => '更新',
+                    'url' => ['action' => 'edit', $user_data->id],
+                    'type' => 'edit',
+                    'class' => 'ms-1'
                 ]) : null;
 
             $deleteButton = $canDelete ?
-                $this->Form->postLink(__('削除'), ['action' => 'delete', $user_data->id], [
-                    'confirm' => __('ユーザー {0} を削除してもよろしいですか?', $user_data->username),
-                    'class' => 'btn btn-sm border ms-1'
+                $this->element('tableActionPostLink', [
+                    'text' => '削除',
+                    'confirm' => "顧客 \"{$user_data->username}\" を削除してもよろしいですか？",
+                    'url' => ['action' => 'delete', $user_data->id],
+                    'type' => 'delete',
+                    'class' => 'ms-1',
                 ]) : null;
 
             return [
                 h($user_data->username),
                 h($user_data->email),
-                $editButton . $deleteButton
+                $updateButton . $deleteButton
             ];
         })->toArray(),
     ]) ?>

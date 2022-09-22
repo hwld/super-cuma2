@@ -32,14 +32,19 @@ use App\ViewData\Operable;
                 $canDelete = $operable->canDelete;
 
                 $editButton = $canEdit ?
-                    $this->Html->link('更新', ['action' => 'edit', $product->id], [
-                        'class' => 'btn btn-sm border'
+                    $this->element('tableActionLink', [
+                        'text' => '更新',
+                        'url' => ['action' => 'edit', $product->id],
+                        'type' => 'edit',
                     ]) : null;
 
                 $deleteButton = $canDelete ?
-                    $this->Form->postLink(__('削除'), ['action' => 'delete', $product->id], [
-                        'confirm' => __('製品 {0} を削除してもよろしいですか?', $product->id),
-                        'class' => 'btn btn-sm border ms-1'
+                    $this->element('tableActionPostLink', [
+                        'text' => '削除',
+                        'confirm' => "製品 {$product->product_name} を削除してもよろしいですか？",
+                        'url' => ['action' => 'delete', $product->id],
+                        'type' => 'delete',
+                        'class' => 'ms-1'
                     ]) : null;
 
                 return [

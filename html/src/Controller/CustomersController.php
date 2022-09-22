@@ -56,7 +56,6 @@ class CustomersController extends AppController
             'prefectures' => $prefectures,
             'canAdd' => $canAdd,
             'searched' => $searched,
-            'csrfToken' => $this->request->getAttribute('csrfToken'),
         ]);
     }
 

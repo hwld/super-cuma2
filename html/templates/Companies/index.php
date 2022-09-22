@@ -31,18 +31,21 @@ use App\Model\Entity\Company;
         'rowCells' => array_map(function (Operable $operable) {
             $company = $operable->data;
             assert($company instanceof Company);
-            $canEdit = $operable->canEdit;
-            $canDelete = $operable->canDelete;
 
-            $editBUtton = $canEdit ?
-                $this->Html->link(__('更新'), ['action' => 'edit', $company->id], [
-                    'class' => 'btn btn-sm border'
+            $editBUtton = $operable->canEdit ?
+                $this->element('tableActionLink', [
+                    'text' => '更新',
+                    'url' => ['action' => 'edit', $company->id],
+                    'type' => 'edit'
                 ]) : null;
 
-            $deleteButton = $canDelete ?
-                $this->Form->postLink(__('削除'), ['action' => 'delete', $company->id], [
-                    'confirm' => __('会社 ${0} を削除してもよろしいですか?', $company->id),
-                    'class' => 'btn btn-sm border ms-1'
+            $deleteButton = $operable->canDelete ?
+                $this->element('tableActionPostLink', [
+                    'text' => '削除',
+                    'confirm' => "会社 {$company->company_name} を削除してもよろしいですか？",
+                    'url' => ['action' => 'delete', $company->id],
+                    'type' => 'delete',
+                    'class' => 'ms-1'
                 ]) : null;
 
             return [

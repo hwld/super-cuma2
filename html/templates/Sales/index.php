@@ -34,15 +34,21 @@ use App\Model\Entity\Sale;
             $canEdit = $sale['permissions']['canEdit'];
             $canDelete = $sale['permissions']['canDelete'];
 
-            $editButton = $canEdit ?
-                $this->Html->link(__('更新'), ['action' => 'edit', $sale_data->id], [
-                    'class' => 'btn btn-sm border'
+            $updateButton = $canEdit ?
+                $this->element('tableActionLink', [
+                    'text' => '更新',
+                    'url' => ['action' => 'edit', $sale_data->id],
+                    'type' => 'edit',
+                    'class' => 'ms-1'
                 ]) : null;
 
             $deleteButton = $canDelete ?
-                $this->Form->postLink(__('削除'), ['action' => 'delete', $sale_data->id], [
-                    'confirm' => __('売上情報を削除してもよろしいですか?', $sale_data->id),
-                    'class' => 'btn btn-sm border ms-1'
+                $this->element('tableActionPostLink', [
+                    'text' => '削除',
+                    'confirm' => "売上情報を削除してもよろしいですか？",
+                    'url' => ['action' => 'delete', $sale_data->id],
+                    'type' => 'delete',
+                    'class' => 'ms-1',
                 ]) : null;
 
             return [
@@ -50,7 +56,7 @@ use App\Model\Entity\Sale;
                 $sale_data->has('customer') ? h($sale_data->customer->name) : '不明',
                 $sale_data->has('product') ? h($sale_data->product->product_name) : '',
                 $this->Number->format($sale_data->amount),
-                $editButton . $deleteButton
+                $updateButton . $deleteButton
             ];
         })->toArray(),
     ]) ?>

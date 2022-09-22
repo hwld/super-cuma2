@@ -104,5 +104,3 @@
     'field_text' => '最終取引日'
 ]) ?>
 <?php $this->end()?>
-
-
