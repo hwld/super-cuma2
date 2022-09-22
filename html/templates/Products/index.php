@@ -14,7 +14,7 @@ use App\ViewData\Operable;
     </h3>
     <div class="text-end">
         <?php if ($canAdd): ?>
-        <?= $this->Html->link('追加', ['action' => 'add'], ['class' => 'btn btn-primary py-1 px-3']) ?>
+        <?= $this->Html->link('追加', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
         <?php endif; ?>
     </div>
     <div class="mt-2"></div>

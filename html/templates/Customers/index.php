@@ -6,6 +6,7 @@
  * @var Cake\Collection\CollectionInterface $prefectures
  * @var boolean $canAdd
  * @var boolean $searched
+ * @var string $csrfToken
  */
 
 use App\Model\Entity\Customer;
@@ -88,18 +89,24 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
         </div>
         <div class="mt-3">
             <?= $this->Form->button('検索', [
-                'class' => 'btn btn-sm btn-primary px-3',
+                'class' => 'btn btn-sm btn-primary',
                 'name' => 'action',
                 'value' => 'search'
             ]) ?>
-            <?= $this->Html->link('クリア', ['action' => 'index'], ['class' => 'btn btn-sm btn-light border px-3'])?>
+            <?= $this->Html->link('クリア', ['action' => 'index'], ['class' => 'btn btn-sm btn-light border'])?>
         </div>
         <?= $this->Form->end() ?>
     </div>
 
-    <div class="text-end mt-3">
+    <div class="mt-3 d-flex justify-content-between">
         <?php if ($canAdd): ?>
-        <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary px-3 py-1']) ?>
+        <div>
+            <?= $this->Html->link(__('インポート'), ['action' => 'import'], ['class' => 'btn border bg-white']) ?>
+            <?= $this->Html->link(__('ダウンロード'), ['action' => 'export'], ['class' => 'btn border bg-white']) ?>
+        </div>
+        <div>
+            <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+        </div>
         <?php endif;?>
     </div>
 
@@ -117,7 +124,7 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
             $this->Paginator->sort('email', 'E-mail'),
             '操作'
         ],
-        'rowCells' => array_map(function ($operable) {
+        'rowCells' => array_map(function ($operable) use ($csrfToken) {
             $customer = $operable->data;
             // vscode-intelephenseがtemplateをサポートしていないのでmixideになってしまう。
             // https://github.com/bmewburn/vscode-intelephense/issues/1144
@@ -126,20 +133,33 @@ $this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
             $canEdit = $operable->canEdit;
             $canDelete = $operable->canDelete;
 
-            $viewButton = $this->Html->link(__('詳細'), ['action' => 'view', $customer->id], [
-                'class' => 'btn btn-sm border'
-            ]);
+            $viewButton =
+            '<a class="btn btn-sm border fw-bold" href="/customers/view/'.$customer->id.'">'.
+                '<img class="align-middle" src="/img/info.svg" width="15px" height="15px" />'.
+                '<span class="ms-1 align-middle">詳細</span>'.
+            '</a>';
 
             $updateButton = $canEdit ?
             $this->Html->link(__('更新'), ['action' => 'edit', $customer->id], [
                 'class' => 'btn btn-sm border ms-1'
             ]) : null;
 
+            $updateButton = $canEdit ?
+            "<a class='ms-1 btn btn-sm border fw-bold' href='/customers/edit/{$customer->id}''>".
+                '<img class="align-middle" src="/img/pen.svg" width="15px" height="15px" />'.
+                '<span class="ms-1 align-middle">更新</span>'.
+            '</a>' : null;
+
+            $onSubmit = "if(!confirm(\"顧客{$customer->name}を削除してもよろしいですか?\")) { return false; }";
             $deleteButton = $canDelete ?
-            $this->Form->postLink(__('削除'), ['action' => 'delete', $customer->id], [
-                'confirm' => __('顧客 "{0}" を削除してもよろしいですか?', $customer->name),
-                'class' => 'btn btn-sm border ms-1'
-            ]) : null;
+            "<form class='d-inline-block' method='post' action='/customers/delete/{$customer->id}' onSubmit='{$onSubmit}' >".
+                "<input hidden name='_csrfToken' value='{$csrfToken}' />".
+                '<button class="btn btn-sm border ms-1 fw-bold">'.
+                    '<img class="align-middle" src="/img/trash.svg" width="15px" height="15px" />'.
+                    '<span class="ms-1 align-middle">削除</span>'.
+                '</button>'.
+            '</form>'
+            : null;
 
             return [
                 h($customer->customer_cd),

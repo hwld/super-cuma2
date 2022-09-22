@@ -14,7 +14,7 @@ use App\Model\Entity\BusinessCategory;
     </h3>
     <div class="text-end">
         <?php if ($canAdd): ?>
-        <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary px-3 py-1']) ?>
+        <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
         <?php endif;?>
     </div>
     <div class="mt-2"></div>

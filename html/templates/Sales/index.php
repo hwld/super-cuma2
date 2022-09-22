@@ -14,7 +14,7 @@ use App\Model\Entity\Sale;
     <div class="text-end">
         <?php if ($canAdd): ?>
         <?= $this->Html->link(__('追加'), ['action' => 'add'], [
-            'class' => 'btn btn-primary px-3 py-1'
+            'class' => 'btn btn-primary'
         ]) ?>
         <?php endif; ?>
     </div>

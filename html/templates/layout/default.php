@@ -50,7 +50,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         }
 
         .btn.border:hover {
-            background-color: rgb(0, 0, 0, 0.05);
+            background-color: rgb(0, 0, 0, 0.05) !important;
         }
     </style>
 </head>

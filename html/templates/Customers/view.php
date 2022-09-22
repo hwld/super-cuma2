@@ -9,11 +9,11 @@
     </h3>
     <div class="text-end">
         <?= $this->Html->link('編集', ['action' => 'edit', $customer->id], [
-            'class' => 'btn btn-sm btn-secondary'
+            'class' => 'btn btn-sm btn-primary'
         ]) ?>
         <?= $this->Html->link('削除', ['action' => 'delete', $customer->id], [
             'confirm' => __('顧客 "{0}" を削除してもよろしいですか?', $customer->name),
-            'class' => 'btn btn-sm btn-danger'
+            'class' => 'btn btn-sm border bg-white'
         ]) ?>
     </div>
     <div class="table-responsive mt-2">
