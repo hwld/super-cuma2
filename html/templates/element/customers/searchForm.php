@@ -3,6 +3,10 @@
  * @var App\View\AppView $this
  * @var array $prefectures
  */
+
+use App\Templator\FormTemplator;
+
+$this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
 ?>
 <div class="card">
     <div class="card-header">

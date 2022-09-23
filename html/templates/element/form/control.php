@@ -1,4 +1,5 @@
-<? 
+<?php
+
 /**
  * @var App\View\AppView $this
  * @var string $field_name
@@ -22,5 +23,4 @@ echo $this->Form->control($field_name, [
     ],
     'class' => $input_type_class.' '.
                 ($this->Form->isFieldError($field_name) ? 'is-invalid' : '')
-]); 
-?>
+]);

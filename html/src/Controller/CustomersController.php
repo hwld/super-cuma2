@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Controller\Component\Customers\CustomersImporter;
 use App\Model\Entity\Customer;
 use Cake\Core\App;
 use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\FrozenDate;
-use Cake\ORM\Query;
 use App\ViewData\Operable;
+use Cake\View\Form\ArrayContext;
+use Exception;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Customers Controller
@@ -86,6 +89,7 @@ class CustomersController extends AppController
     {
         $customer = $this->Customers->newEmptyEntity();
         $this->Authorization->authorize($customer);
+
         if ($this->request->is('post')) {
             $customer = $this->Customers->patchEntity($customer, $this->request->getData());
             if ($this->Customers->save($customer)) {
@@ -151,6 +155,67 @@ class CustomersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * @return \Cake\Http\Response|null|void
+     */
+    public function import()
+    {
+        // 顧客を追加できるユーザーに認可する。
+        $emptyCustomer = $this->Customers->newEmptyEntity();
+        $this->Authorization->authorize($emptyCustomer, 'add');
+
+        $context_array = [
+            'schema' => [
+                'customers' => ['type' => 'file'],
+            ],
+            'errors' => [
+                'customers' => null,
+            ],
+            'required' => [
+                'customers' => true,
+            ]
+        ];
+
+        if ($this->request->is('post')) {
+            $customers_file = $this->request->getData('customers');
+            assert($customers_file instanceof UploadedFileInterface);
+
+            $importer = new CustomersImporter();
+            try {
+                $count = $importer($customers_file);
+                $this->redirect(['action' => 'import']);
+                $this->Flash->success("{$count}人の顧客情報のインポートに成功しました。");
+            } catch (Exception $e) {
+                if ($e->getCode() === CustomersImporter::NO_CSV_FILE) {
+                    //CSVファイルじゃなかったときはエラーを含むcontextを作成する。
+                    $context_array = [...$context_array,...['errors' => [
+                            'customers' => 'CSVファイルを選択してください。'
+                        ]]
+                    ];
+                } elseif ($e->getCode() === CustomersImporter::COULD_NOT_SAVE) {
+                    // 保存に失敗したときはエラーメッセージを表示させる。
+                    $this->Flash->error('顧客情報のインポートに失敗しました。CSVファイルの形式を確認してください。');
+                } else {
+                    throw $e;
+                }
+            }
+        }
+
+        $this->set([
+            'import_form_context' => new ArrayContext($context_array),
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function export()
+    {
+        //TODO
+        $this->Authorization->skipAuthorization();
+        $this->request->allowMethod(['post']);
     }
 
     /**

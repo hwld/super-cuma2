@@ -12,8 +12,6 @@ use App\Model\Entity\Customer;
 use App\ViewData\Operable;
 use App\Templator\FormTemplator;
 
-$this->Form->setTemplates(FormTemplator::getVerticalFormTemplates());
-
 ?>
 <div>
     <h3><?= __('顧客一覧') ?>

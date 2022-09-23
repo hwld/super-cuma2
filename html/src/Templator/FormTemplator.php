@@ -25,7 +25,7 @@ class FormTemplator
             // Error item wrapper.
             'errorItem' => '<li>{{text}}</li>',
             // File input used by file().
-            'file' => '<input type="file" name="{{name}}"{{attrs}}>',
+            'file' => '<div class="col-sm-9"><input type="file" name="{{name}}"{{attrs}}></div>',
             // Fieldset element used by allControls().
             'fieldset' => '<fieldset{{attrs}}>{{content}}</fieldset>',
             // Open tag used by create().
