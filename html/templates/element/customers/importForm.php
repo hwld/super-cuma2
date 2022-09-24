@@ -30,4 +30,7 @@ $this->assign('action_text', $action_text);
         'accept' => '.csv',
     ],
 ]) ?>
+<div class="ms-1 mt-1 text-secondary" style="font-size: 0.8rem;">
+    ※CSVファイルの文字コードはShift-JISにしてください。<br>Macを使用している場合は、CSVファイルをShift-jisに変換する必要があるかもしれません。
+</div>
 <?php $this->end()?>

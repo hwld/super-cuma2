@@ -11,7 +11,8 @@ use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\FrozenDate;
 use App\ViewData\Operable;
 use Cake\View\Form\ArrayContext;
-use Exception;
+use App\Controller\Component\Customers\CustomersImportException;
+use Laminas\Diactoros\Stream;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
@@ -182,15 +183,16 @@ class CustomersController extends AppController
             $customers_file = $this->request->getData('customers');
             assert($customers_file instanceof UploadedFileInterface);
 
-            $importer = new CustomersImporter();
             try {
-                $count = $importer($customers_file);
-                $this->redirect(['action' => 'import']);
+                $count = CustomersImporter::from($customers_file);
+
                 $this->Flash->success("{$count}人の顧客情報のインポートに成功しました。");
-            } catch (Exception $e) {
+                $this->redirect(['action' => 'import']);
+            } catch (CustomersImportException $e) {
                 if ($e->getCode() === CustomersImporter::NO_CSV_FILE) {
                     //CSVファイルじゃなかったときはエラーを含むcontextを作成する。
-                    $context_array = [...$context_array,...['errors' => [
+                    $context_array = [
+                        ...$context_array, ...['errors' => [
                             'customers' => 'CSVファイルを選択してください。'
                         ]]
                     ];
@@ -209,7 +211,7 @@ class CustomersController extends AppController
     }
 
     /**
-     * @return void
+     * @return \Cake\Http\Response|null|void
      */
     public function export()
     {

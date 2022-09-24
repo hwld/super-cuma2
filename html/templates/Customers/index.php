@@ -24,7 +24,7 @@ use App\Templator\FormTemplator;
         <?php if ($canAdd): ?>
         <div>
             <?= $this->Html->link(__('インポート'), ['action' => 'import'], ['class' => 'btn border bg-white']) ?>
-            <?= $this->Html->link(__('ダウンロード'), ['action' => 'export'], ['class' => 'btn border bg-white']) ?>
+            <?= $this->Form->postLink(__('ダウンロード'), ['action' => 'export'], ['class' => 'btn border bg-white']) ?>
         </div>
         <div>
             <?= $this->Html->link(__('追加'), ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
