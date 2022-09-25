@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Controller\Component\Customers\CustomersImporter;
+use App\Controller\Component\Customers\ImporterComponent;
 use App\Model\Entity\Customer;
 use Cake\Core\App;
 use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\FrozenDate;
 use App\ViewData\Operable;
 use Cake\View\Form\ArrayContext;
-use App\Controller\Component\Customers\CustomersImportException;
-use Laminas\Diactoros\Stream;
+use App\Controller\Component\Customers\ImporterException;
 use Psr\Http\Message\UploadedFileInterface;
+use App\Controller\Component\Customers\ExporterComponent;
 
 /**
  * Customers Controller
@@ -23,6 +23,10 @@ use Psr\Http\Message\UploadedFileInterface;
  */
 class CustomersController extends AppController
 {
+    public $paginate = [
+        'limit' => 10
+    ];
+
     /**
      * Index method
      *
@@ -183,20 +187,25 @@ class CustomersController extends AppController
             $customers_file = $this->request->getData('customers');
             assert($customers_file instanceof UploadedFileInterface);
 
+            $importer = $this->loadComponent('Importer', [
+                'className' => ImporterComponent::class
+            ]);
+            assert($importer instanceof ImporterComponent);
+
             try {
-                $count = CustomersImporter::from($customers_file);
+                $count =$importer->from($customers_file);
 
                 $this->Flash->success("{$count}人の顧客情報のインポートに成功しました。");
                 $this->redirect(['action' => 'import']);
-            } catch (CustomersImportException $e) {
-                if ($e->getCode() === CustomersImporter::NO_CSV_FILE) {
+            } catch (ImporterException $e) {
+                if ($e->getCode() === ImporterException::NO_CSV_FILE) {
                     //CSVファイルじゃなかったときはエラーを含むcontextを作成する。
                     $context_array = [
                         ...$context_array, ...['errors' => [
                             'customers' => 'CSVファイルを選択してください。'
                         ]]
                     ];
-                } elseif ($e->getCode() === CustomersImporter::COULD_NOT_SAVE) {
+                } elseif ($e->getCode() === ImporterException::COULD_NOT_SAVE) {
                     // 保存に失敗したときはエラーメッセージを表示させる。
                     $this->Flash->error('顧客情報のインポートに失敗しました。CSVファイルの形式を確認してください。');
                 } else {
@@ -215,9 +224,21 @@ class CustomersController extends AppController
      */
     public function export()
     {
-        //TODO
+        // 認証を行っているユーザーに認可する
         $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post']);
+
+        $exporter = $this->loadComponent('Exporter', [
+            'className' => ExporterComponent::class
+        ]);
+        assert($exporter instanceof ExporterComponent);
+
+        $stream = $exporter->getStream();
+
+        return $this->response
+            ->withType('csv')
+            ->withBody($stream)
+            ->withDownload('customers.csv');
     }
 
     /**

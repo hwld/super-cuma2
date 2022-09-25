@@ -5,26 +5,25 @@ namespace App\Controller\Component\Customers;
 use App\Model\Table\CustomersTable;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Security;
-use App\Controller\Component\Customers\CustomersImportException;
+use App\Controller\Component\Customers\ImporterException;
+use Cake\Controller\Component;
 use Exception;
 use Psr\Http\Message\UploadedFileInterface;
 
-class CustomersImporter
+class ImporterComponent extends Component
 {
-    public const NO_CSV_FILE = 1;
-    public const COULD_NOT_SAVE = 3;
-
     /**
      * @param UploadedFileInterface $csv_file
+     * @return int import count
      */
-    public static function from($csv_file): int
+    public function from($csv_file)
     {
         $file_path = TMP . Security::randomString(30);
         $csv_file->moveTo($file_path);
 
         // アップロードされたファイルがCSVかどうかチェックする
         if (mime_content_type($file_path) !== 'text/csv') {
-            throw new CustomersImportException('No CSV file', CustomersImporter::NO_CSV_FILE);
+            throw new ImporterException('No CSV file', ImporterException::NO_CSV_FILE);
         }
 
         $file = fopen($file_path, 'r');
@@ -65,7 +64,7 @@ class CustomersImporter
                 ];
                 $customer_entity = $customers_table->newEntity($customer);
                 if (!$customers_table->save($customer_entity)) {
-                    throw new CustomersImportException("Could not save", CustomersImporter::COULD_NOT_SAVE);
+                    throw new ImporterException("Could not save", ImporterException::COULD_NOT_SAVE);
                 };
                 $row_count += 1;
             }
