@@ -38,7 +38,7 @@ use App\Model\Entity\BusinessCategory;
             $deleteButton = $operable->canDelete ?
                 $this->element('tableActionPostLink', [
                     'text' => '削除',
-                    'confirm' => "カテゴリ {$businessCategory->business_category_name} を削除してもよろしいですか？",
+                    'confirm' => h("カテゴリ {$businessCategory->business_category_name} を削除してもよろしいですか？"),
                     'url' => ['action' => 'delete', $businessCategory->id],
                     'type' => 'delete',
                     'class' => 'ms-1'

@@ -6,6 +6,7 @@ use App\Model\Table\CustomersTable;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Security;
 use App\Controller\Component\Customers\ImporterException;
+use App\Service\CsvReader;
 use Cake\Controller\Component;
 use Exception;
 use Psr\Http\Message\UploadedFileInterface;
@@ -18,35 +19,16 @@ class ImporterComponent extends Component
      */
     public function from($csv_file)
     {
-        $file_path = TMP . Security::randomString(30);
-        $csv_file->moveTo($file_path);
-
-        // アップロードされたファイルがCSVかどうかチェックする
-        if (mime_content_type($file_path) !== 'text/csv') {
-            throw new ImporterException('No CSV file', ImporterException::NO_CSV_FILE);
-        }
-
-        $file = fopen($file_path, 'r');
-        if ($file === false) {
-            throw new Exception('Could not open file');
-        }
-        rewind($file);
-
         $customers_table = TableRegistry::getTableLocator()->get('Customers');
         assert($customers_table instanceof CustomersTable);
-
         $connection = $customers_table->getConnection();
         $connection->begin();
-        $row_count = 0;
-        try {
-            $is_first = true;
-            while (($data = fgetcsv($file, 0, ',')) !== false) {
-                if ($is_first) {
-                    $is_first = false;
-                    continue;
-                }
 
-                mb_convert_variables('UTF-8', 'SJIS-win', $data);
+        $row_count = 0;
+        $reader = CsvReader::from($csv_file);
+        $reader->setSkipHeader();
+        try {
+            while (($data = $reader->readLine()) !== null) {
                 $customer = [
                     'customer_cd' => $data[0],
                     'name' => $data[1],
@@ -71,9 +53,6 @@ class ImporterComponent extends Component
         } catch (Exception $e) {
             $connection->rollback();
             throw $e;
-        } finally {
-            fclose($file);
-            unlink($file_path);
         }
         $connection->commit();
 

@@ -14,8 +14,7 @@ $icon_link = match ($type) {
     default => ''
 };
 
-$confirm_text = isset($confirm) ? h($confirm) : null;
-$onSubmit = $confirm_text ? "if(!confirm('{$confirm_text}')){ return false; }" : '';
+$onSubmit = $confirm ? "if(!confirm('{$confirm}')){ return false; }" : '';
 ?>
 <form class='d-inline-block <?= $class ?? '' ?>'
     method='post' action='<?= $this->Url->build($url) ?>'
