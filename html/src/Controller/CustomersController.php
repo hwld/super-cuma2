@@ -260,14 +260,14 @@ class CustomersController extends AppController
             $lasttrade_end_text = $searchParams['lasttrade_end'] ?? '';
 
             $newExp = $exp
-                ->like('customer_cd', '%'.$customer_cd.'%')
-                ->like('name', '%'.$customer_name.'%')
-                ->like('kana', '%'.$customer_kana.'%')
-                ->like('phone', '%'.$phone.'%')
-                ->like('email', '%'.$email.'%');
+                ->like('customer_cd', '%'.addcslashes($customer_cd, '%_').'%')
+                ->like('name', '%'.addcslashes($customer_name, '%_').'%')
+                ->like('kana', '%'.addcslashes($customer_kana, '%_').'%')
+                ->like('phone', '%'.addcslashes($phone, '%_').'%')
+                ->like('email', '%'.addcslashes($email, '%_').'%');
 
             if ($company_name != '') {
-                $newExp  = $newExp->like('Companies.company_name', '%'.$company_name.'%');
+                $newExp  = $newExp->like('Companies.company_name', '%'.addcslashes($company_name, '%_').'%');
             }
 
             if ($pref_id != '') {
