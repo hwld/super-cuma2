@@ -423,7 +423,6 @@ return [
         // 1年(分)
         'timeout' => 525600,
         'ini' => [
-            'session.save_path' => '/tmp/super-cuma',
             // 1年(秒)
             'session.cookie_lifetime' => 31536000,
         ]
