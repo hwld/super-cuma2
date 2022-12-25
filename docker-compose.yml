@@ -16,7 +16,17 @@ services:
     volumes:
       - "./html:/var/www/html"
       - "./php.ini:/usr/local/etc/php/php.ini"
-
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITARY=1
+      - PMA_HOST=super-cuma2-db
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    depends_on:
+      - super-cuma2-db
+    ports:
+      - 5555:80
   super-cuma2-db:
     container_name: super-cuma2-db
     image: mysql:8.0
